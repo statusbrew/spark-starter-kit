@@ -6,7 +6,7 @@ from auth.jwt_bp import jwt_required
 import os
 from models import User, Events
 from utils.r2 import generate_presigned_url, upload_file_to_r2
-from sqlalchemy import UUID
+from sqlalchemy import UUID, func
 
 event_bp = Blueprint("event_bp", __name__)
 
@@ -38,7 +38,7 @@ def create_event():
     datetime_str = request.form.get("datetime")
     location = request.form.get("location")
     tags_str = request.form.get("tags")
-    tags = tags_str.split(",") if tags_str else []
+    tags = [tag.strip() for tag in tags_str.split(",")] if tags_str else []
     poster = request.files.get("poster")
 
     print(user_id)
@@ -65,7 +65,7 @@ def create_event():
             description=description,
             datetime=event_datetime,
             location=location,
-            tags=tags,
+            tags=tags,  # This will be stored as a list in the database
             poster_filename=poster_filename,
             user_id=uuid.UUID(user_id),  # Convert string to UUID object
             approval_status="pending",
@@ -132,6 +132,35 @@ def get_pending_events():
         ]
 
         return jsonify(events_list), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        session.close()
+
+
+@jwt_required
+@event_bp.route("/admin/approve/<event_id>", methods=["POST"])
+def approve_event(event_id):
+    session = get_db_session()
+    try:
+        event = session.query(Events).get(event_id)
+        if not event:
+            return jsonify({"error": "Event not found"}), 404
+
+        # Get users with tags that match any of the event tags
+        users_with_matching_tags = (
+            session.query(User).filter(User.tags.op("&&")(event.tags)).all()
+        )
+
+        # Log or process the users with matching tags
+        for user in users_with_matching_tags:
+            print(f"User {user.name} ({user.email}) matches event tags")
+
+        event.approval_status = "approved"
+        session.commit()
+
+        return jsonify({"message": "Event approved successfully"}), 200
     except Exception as e:
         session.rollback()
         return jsonify({"error": str(e)}), 500
