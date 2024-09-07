@@ -4,6 +4,13 @@ from config import app, db
 from flask import request, session, jsonify, g
 from itsdangerous import Signer, BadSignature
 from event_management.event_bp import event_bp
+from fire_sensor.fire_sensor_bp import fire_sensor_bp
+from user_emergency.user_emergency_bp import user_emergency_bp
+
+#demo '/' endpoint
+@app.route('/', methods=['GET'])
+def index():
+    return 'Hello World!'
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -23,9 +30,7 @@ app.register_blueprint(fire_sensor_bp, url_prefix='/fire-sensor')
 #user emergency feature blueprint
 app.register_blueprint(user_emergency_bp, url_prefix='/user-emergency')
 
-#run the app
-if __name__ == '__main__':
-# event feature blueprint
+
 app.register_blueprint(event_bp, url_prefix="/events")
 
 # run the app
