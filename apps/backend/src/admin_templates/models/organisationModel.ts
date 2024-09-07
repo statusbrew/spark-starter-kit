@@ -56,10 +56,12 @@ const OrganisationSchema = new Schema({
   otpSms: { type: String },
   otpExpiry: { type: Date },
   customer: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
-  direction: [{ type: Schema.Types.ObjectId, ref: "Direction" }],
   salesTransactions: [{ type: Schema.Types.ObjectId, ref: "SalesTransaction" }],
   vehicles: [{ type: Schema.Types.ObjectId, ref: "Vehicle" }],
-  parkingLayout: [{type: Schema.Types.ObjectId, ref: "ParkingLayout"}],
+  parkingLayout: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ParkingLayout' // Assuming 'Pillar' is a model that you want to reference
+  },
   lastLogin: { type: Date },
   loginDetails: [{ type: String }],
   isVerified: { type: Boolean, default: false },

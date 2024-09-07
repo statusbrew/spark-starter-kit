@@ -8,7 +8,10 @@ const CustomerSchema = new mongoose.Schema({
     exitDateTime: { type: Date },
     organizationUniqueDomainID: { type: String },
     pin: { type: Number },
-    organisation: [{ type: mongoose.Schema.Types.ObjectId, ref: "Organisation" }],
+    isPaymentVerified: {type: Boolean, default: false},
+    isCarParked: {type: Boolean, default: false},
+    isCarExit: {type: Boolean, default: false},
+    organisation: { type: mongoose.Schema.Types.ObjectId, ref: "Organisation" },
     direction: [{ type: mongoose.Schema.Types.ObjectId, ref: "Direction" }],
     salesTransactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "SalesTransaction" }],
     vehicle: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" }],
@@ -34,6 +37,5 @@ CustomerSchema.methods.isPasswordMatched = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-CustomerSchema.index({ refreshToken: 1 });
 
 export default mongoose.model("CustomerSchema", CustomerSchema);

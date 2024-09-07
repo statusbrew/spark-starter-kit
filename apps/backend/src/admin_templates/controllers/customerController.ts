@@ -4,9 +4,13 @@ import {
     getCurrentDateTime,
     verifyPayment,
     createRazorpayOrder,
-    fetchDirectionForCustomer
+    fetchDirectionForCustomer,
+    findNearestVacantSpot,
+    findPathToAllocatedPillar
   } from "../../util/util";
 import organisationModel from "../models/organisationModel";
+import salesTransactionModel from "../models/salesTransactionModel";
+import parkingModel from "../models/parkingModel";
 
 export const postNumberPlateEntry = async (req, res) => {
   try {
@@ -23,6 +27,7 @@ export const postNumberPlateEntry = async (req, res) => {
 
     let amount = vehicleType === "car" ? org.carPrice : org.motorPrice;
 
+
     // Create a new customer entry
     const newCustomer = new customerModel({
       vehicleType,
@@ -35,7 +40,7 @@ export const postNumberPlateEntry = async (req, res) => {
     await newCustomer.save();
 
 
-    const paymentOrder = await createRazorpayOrder(newCustomer,amount);
+    const paymentOrder = await createRazorpayOrder(newCustomer,amount || 100);
 
     return res.status(200).json({
       status_code: 200,
@@ -55,6 +60,7 @@ export const postNumberPlateEntry = async (req, res) => {
 
 
 
+
 export const paymentVerificationAndDirectionAllotment = async (req, res) => {
   try {
     const { razorpay_signature, razorpay_order_id, razorpay_payment_id, customerID } = req.body;
@@ -66,19 +72,53 @@ export const paymentVerificationAndDirectionAllotment = async (req, res) => {
       });
     }
 
-    // Fetch direction after successful payment verification
-    // const direction = await fetchDirectionForCustomer(customerID);
-    // if (!direction) {
-    //   return res.status(404).json({
-    //     status_code: 404,
-    //     message: "No directions found for the given customer ID"
-    //   });
-    // }
+    // Record the sales transaction
+    const newTransaction = new salesTransactionModel({
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      customerID,
+      status: 'verified'
+    });
+    await newTransaction.save();
 
+    // Update customer as payment verified
+    const customerUpdate = await customerModel.findByIdAndUpdate(customerID, {
+      $set: { isPaymentVerified: true },
+      $push: { transactions: newTransaction._id }  // Assuming you store transaction references in customer model
+    }, { new: true }).populate('organisation');
+
+    if (!customerUpdate) {
+      return res.status(404).json({
+        status_code: 404,
+        message: "Customer not found"
+      });
+    }
+
+    const organisation = customerUpdate.organisation;
+
+    // Fetch parking layout details for the organization
+    let pillarDetails = await parkingModel.findOne({ organisation: organisation });
+
+    if (!pillarDetails || !pillarDetails.pillars || !pillarDetails.entryGateNearestPillar) {
+      return res.status(404).json({
+        status_code: 404,
+        message: "Parking layout details not found"
+      });
+    }
+
+   const locationSpotted = findNearestVacantSpot(pillarDetails.pillars, pillarDetails.entryGateNearestPillar);
+
+   // Calculate the directions to the allocated spot using pillar names
+   const directionArray = findPathToAllocatedPillar(pillarDetails.pillars, pillarDetails.entryGateNearestPillar, locationSpotted);
+
+   
     return res.status(200).json({
       status_code: 200,
-      // data: direction,
-      message: "Payment verified and direction allocated successfully"
+      message: "Payment verified and direction allocated successfully",
+      customer: customerUpdate,
+      directionArray: directionArray,
+      locationSpotted: locationSpotted
     });
 
   } catch (error) {
@@ -89,6 +129,8 @@ export const paymentVerificationAndDirectionAllotment = async (req, res) => {
     });
   }
 };
+
+
 
 
 

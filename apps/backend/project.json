@@ -37,9 +37,6 @@
         }
       }
     },
-    "scripts": {
-      "start": "nodemon main.ts"
-    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
