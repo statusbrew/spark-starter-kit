@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 load_dotenv()
 
 app = Flask(__name__)
+# Update CORS configuration
+
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 SECRET_KEY_SUPABASE = os.getenv("SECRET_KEY")
@@ -23,7 +25,6 @@ Session = sessionmaker(bind=engine)
 Base = declarative_base()
 
 db = SQLAlchemy(app)
-CORS(app)
 
 
 # Function to get a database session
