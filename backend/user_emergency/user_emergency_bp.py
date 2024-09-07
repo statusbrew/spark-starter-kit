@@ -12,6 +12,7 @@ def report_emergency():
     try:
         # Validate and convert user_id to UUID
         user_id = uuid.UUID(g.user_id)  # Retrieve current user from the session
+        print(user_id)
     except ValueError:
         # Return an error if user_id is not a valid UUID
         return jsonify({"error": "Invalid user_id format. Must be a valid UUID."}), 400
