@@ -8,7 +8,9 @@ import mongoose from "mongoose";
 import db from "./config/db"
 
 import loginRoutes from "./admin_templates/routes/loginRoutes";
+import adminRegisterRoutes from "./admin_templates/routes/adminRegisterRoutes";
 import contactUsRoutes from "./website/routes/contactUsRoutes";
+
 import {
   demoScheduler
 } from "./util/scheduler.js";
@@ -24,6 +26,7 @@ app.use(cookieParser());
 
 const currentDate = new Date();
 app.use("/admin", loginRoutes);
+app.use("/admin", adminRegisterRoutes);
 app.use("/website", contactUsRoutes);
 
 
