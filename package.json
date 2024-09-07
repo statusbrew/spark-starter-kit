@@ -20,6 +20,7 @@
     "@nx/eslint-plugin": "19.6.2",
     "@nx/jest": "19.6.2",
     "@nx/js": "19.6.2",
+    "@nx/next": "^19.6.2",
     "@nx/playwright": "19.6.2",
     "@nx/workspace": "19.6.2",
     "@playwright/test": "^1.36.0",
