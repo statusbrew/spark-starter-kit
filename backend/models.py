@@ -108,9 +108,7 @@ class Users(Base):
     reauthentication_sent_at = mapped_column(DateTime(True))
     deleted_at = mapped_column(DateTime(True))
 
-    user: Mapped["PublicUser"] = relationship(
-        "User", uselist=False, back_populates="user"
-    )
+    user: Mapped["User"] = relationship("User", uselist=False, back_populates="user")
 
 
 t_pg_stat_statements = Table(
@@ -191,7 +189,7 @@ class Sensor(Base):
     )
 
 
-class PublicUser(Base):
+class User(Base):
     __tablename__ = "user"
     __table_args__ = (
         ForeignKeyConstraint(["user_id"], ["auth.users.id"], name="user_user_id_fkey"),
@@ -253,7 +251,7 @@ class EmergencyReport(Base):
     sensor: Mapped[Optional["Sensor"]] = relationship(
         "Sensor", back_populates="emergency_report"
     )
-    user: Mapped[Optional["PublicUser"]] = relationship(
+    user: Mapped[Optional["User"]] = relationship(
         "User", back_populates="emergency_report"
     )
 
@@ -286,15 +284,13 @@ class EnergyUsage(Base):
     user_id = mapped_column(Integer, nullable=False)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="energy_usage")
-    user: Mapped["PublicUser"] = relationship("User", back_populates="energy_usage")
+    user: Mapped["User"] = relationship("User", back_populates="energy_usage")
 
 
 class Events(Base):
     __tablename__ = "events"
     __table_args__ = (
-        ForeignKeyConstraint(
-            ["user_id"], ["user.id"], ondelete="CASCADE", name="events_user_id_fkey"
-        ),
+        ForeignKeyConstraint(["user_id"], ["user.user_id"], name="events_user_id_fkey"),
         PrimaryKeyConstraint("id", name="events_pkey"),
     )
 
@@ -307,10 +303,10 @@ class Events(Base):
     approval_status = mapped_column(
         Text, nullable=False, server_default=text("'pending'::text")
     )
-    user_id = mapped_column(Integer, nullable=False)
     poster_filename = mapped_column(Text)
+    user_id = mapped_column(Uuid)
 
-    user: Mapped["PublicUser"] = relationship("User", back_populates="events")
+    user: Mapped[Optional["User"]] = relationship("User", back_populates="events")
     volunteer_forms: Mapped[List["VolunteerForms"]] = relationship(
         "VolunteerForms", uselist=True, back_populates="event"
     )
@@ -344,7 +340,7 @@ class WaterUsage(Base):
     user_id = mapped_column(Integer, nullable=False)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="water_usage")
-    user: Mapped["PublicUser"] = relationship("User", back_populates="water_usage")
+    user: Mapped["User"] = relationship("User", back_populates="water_usage")
 
 
 class VolunteerForms(Base):
@@ -357,23 +353,22 @@ class VolunteerForms(Base):
             name="volunteer_forms_event_id_fkey",
         ),
         ForeignKeyConstraint(
-            ["user_id"],
-            ["user.id"],
-            ondelete="CASCADE",
-            name="volunteer_forms_user_id_fkey",
+            ["user_id"], ["user.user_id"], name="volunteer_forms_user_id_fkey"
         ),
         PrimaryKeyConstraint("id", name="volunteer_forms_pkey"),
     )
 
     id = mapped_column(Integer)
     event_id = mapped_column(Integer, nullable=False)
-    user_id = mapped_column(Integer, nullable=False)
     email = mapped_column(Text, nullable=False)
     phone_number = mapped_column(String(15), nullable=False)
     status = mapped_column(Text, nullable=False, server_default=text("'pending'::text"))
     address = mapped_column(Text)
     availability = mapped_column(Text)
     skills = mapped_column(ARRAY(Text()))
+    user_id = mapped_column(Uuid)
 
     event: Mapped["Events"] = relationship("Events", back_populates="volunteer_forms")
-    user: Mapped["PublicUser"] = relationship("User", back_populates="volunteer_forms")
+    user: Mapped[Optional["User"]] = relationship(
+        "User", back_populates="volunteer_forms"
+    )

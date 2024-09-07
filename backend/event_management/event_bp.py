@@ -1,12 +1,12 @@
 import uuid
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, g, jsonify, request, make_response
 from config import db, get_db_session, engine
 from datetime import datetime
 from auth.jwt_bp import jwt_required
 import os
-from models import PublicUser, Events
+from models import User, Events
 from utils.r2 import generate_presigned_url, upload_file_to_r2
-
+from sqlalchemy import UUID
 
 event_bp = Blueprint("event_bp", __name__)
 
@@ -31,7 +31,8 @@ def generate_unique_filename(original_filename):
 @event_bp.route("/create", methods=["POST"])
 @jwt_required
 def create_event():
-    user_id = 123
+
+    user_id = g.user_id
     title = request.form.get("title")
     description = request.form.get("description")
     datetime_str = request.form.get("datetime")
@@ -39,9 +40,10 @@ def create_event():
     tags = request.form.getlist("tags")
     poster = request.files.get("poster")
 
-    event_datetime = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
+    print(user_id)
 
-    # Handle poster upload
+    event_datetime = datetime.fromisoformat(datetime_str.replace("Z", "+00:00"))
+
     poster_filename = None
     if poster:
         unique_filename = generate_unique_filename(poster.filename)
@@ -51,8 +53,6 @@ def create_event():
         upload_result = upload_file_to_r2(temp_path, unique_filename)
         if upload_result:
             poster_filename = unique_filename
-        else:
-            return jsonify({"error": "Failed to upload poster"}), 500
 
         os.remove(temp_path)  # Clean up the temporary file
 
@@ -66,6 +66,8 @@ def create_event():
             location=location,
             tags=tags,
             poster_filename=poster_filename,
+            user_id=uuid.UUID(user_id),  # Convert string to UUID object
+            approval_status="pending",
         )
 
         session.add(new_event)
