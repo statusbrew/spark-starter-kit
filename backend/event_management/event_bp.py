@@ -37,7 +37,8 @@ def create_event():
     description = request.form.get("description")
     datetime_str = request.form.get("datetime")
     location = request.form.get("location")
-    tags = request.form.getlist("tags")
+    tags_str = request.form.get("tags")
+    tags = tags_str.split(",") if tags_str else []
     poster = request.files.get("poster")
 
     print(user_id)
@@ -82,7 +83,35 @@ def create_event():
 
 
 @jwt_required
-@event_bp.route("/admin/approve", methods=["GET"])
+@event_bp.route("/admin", methods=["GET"])
+def get_all_events():
+    session = get_db_session()
+    try:
+        events = session.query(Events).all()
+        events_list = [
+            {
+                "id": str(event.id),  # Convert UUID to string
+                "title": event.title,
+                "description": event.description,
+                "datetime": event.datetime.isoformat(),  # Convert datetime to ISO format string
+                "location": event.location,
+                "tags": event.tags,
+                "poster_filename": event.poster_filename,
+                "user_id": str(event.user_id),  # Convert UUID to string
+                "approval_status": event.approval_status,
+            }
+            for event in events
+        ]
+        return jsonify(events_list), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        session.close()
+
+
+@jwt_required
+@event_bp.route("/admin/pending", methods=["GET"])
 def get_pending_events():
     session = get_db_session()
     try:
