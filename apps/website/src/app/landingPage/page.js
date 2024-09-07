@@ -6,23 +6,23 @@ import { useState } from "react";
 const team = [
     {
         name: "Simarpreet Singh",
-        dp: "/"
+        dp: "/simar.svg"
     },
     {
         name: "Vaibhav Chopra",
-        dp: "/"
+        dp: "/vaibhav.svg"
     },
     {
         name: "Tanveer Kaur",
-        dp: "/"
+        dp: "/tanveer.svg"
     },
     {
         name: "Paras Chawla",
-        dp: "/"
+        dp: "/paras.svg"
     },
     {
         name: "Bavneet Kaur",
-        dp: "/"
+        dp: "/bavneet.svg"
     }
 ]
 
@@ -55,11 +55,11 @@ export default function LandingPage() {
         <>
             <div className="w-full text-center flex flex-col justify-center items-center bg-[url('/homeBg.png')] bg-cover relative">
 
-                <div className="flex flex-wrap justify-between px-6 md:gap-24 md:w-11/12 my-8 bg-white rounded-2xl">
+                <div className="flex flex-wrap justify-between items-center px-6 md:gap-24 md:w-11/12 my-8 bg-white rounded-2xl">
                     <div className="px-9 flex h-full items-center">
                         <img src="/parkLogo.svg" alt="logo" className="w-full" />
                     </div>
-                    <div className="flex sm:gap-5 md:gap-8 md:pl-8 h-full w-auto items-center justify-center">
+                    <div className="flex sm:gap-5 md:gap-8 md:pl-8 h-full w-auto py-auto items-center justify-center">
                         <div>
                             <a className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">HOME </a>
                         </div>
@@ -97,7 +97,7 @@ export default function LandingPage() {
 
                 {/* team */}
                 <h1 className="font-semibold text-3xl my-4" >Our Team</h1>
-                <div className="flex flex-wrap items-center justify-center md:justify-between gap-8 w-8/12 my-10 mb-[5rem]">
+                <div className="flex flex-wrap items-center justify-center md:justify-between gap-8 w-8/12 my-10 mb-[15rem]">
                     {
                         team.map((item, index) => (
                             <div key={index} className="flex w-[100px] flex-col justify-center items-center text-center">
