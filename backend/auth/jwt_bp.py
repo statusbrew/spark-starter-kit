@@ -28,11 +28,8 @@ def jwt_required(f):
                 options={"verify_signature": False},
             )
             g.user_id = data["sub"]
-        except jwt.ExpiredSignatureError:
+        except Exception as e:
             return jsonify({"message": "Token has expired!"}), 401
-        except jwt.InvalidTokenError as e:
-            print(e)
-            return jsonify({"message": "Invalid token!"}), 401
 
         return f(*args, **kwargs)
 
