@@ -18,7 +18,7 @@ import {
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import { columns, vehicles as initialVehicles } from "../data"; // Renaming vehicles to initialVehicles
-import { capitalize } from "../utils";
+import { capitalize } from "../../../../website/src/app/utils";
 
 const statusColorMap = {
   active: "bg-green-200 text-green-700",
