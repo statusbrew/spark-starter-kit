@@ -21,7 +21,7 @@ export const postNumberPlateEntry = async (req, res) => {
       });
     }
 
-    let amount = vehicleType === "car" ? org.carPrice : org.motorVehicle;
+    let amount = vehicleType === "car" ? org.carPrice : org.motorPrice;
 
     // Create a new customer entry
     const newCustomer = new customerModel({

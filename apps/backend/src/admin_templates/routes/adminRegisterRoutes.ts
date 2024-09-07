@@ -5,7 +5,7 @@ const { submitMallDetails, submitParkingLayout,submitParkingFee,adminHomeGet ,ad
 
 
 router.post('/mallDetails',submitMallDetails);
-router.post('/parkinLayout', submitParkingLayout);
+router.post('/parkingLayout', submitParkingLayout);
 router.post('/parkingFee', submitParkingFee);
 router.get('/getAdminHome', adminHomeGet);
 router.get('/getAdminSystemCrashes', adminSystemCrashesController);

@@ -104,8 +104,8 @@ export const verifyOTP = async (req, res) => {
           });
       }
 
-      // organization.isVerified = true; // Update the organization as verified
-      // await organization.save();
+      organization.isVerified = true; // Update the organization as verified
+      await organization.save();
 
       return res.status(200).json({
           status_code: 200,
