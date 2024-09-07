@@ -11,6 +11,11 @@ import {
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import ProductCard from "../component/Products";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
+
+const stripePromise: Promise<Stripe | null> = loadStripe(
+  "pk_test_51P66VjSBINuBNg5tRulpGci113qdQRkOisw8aDnZI7CAa66Yw0QKKxqp9SU46ZLYYFSh5u2avLps9QHJQhJTV7Dh00BeNAEodP"
+);
 
 export interface Product {
   imageURL: string | null | undefined;
@@ -27,9 +32,12 @@ const Cart = () => {
   const [productIdError, setProductIdError] = useState<boolean>(false); 
   const [cart, setCart] = useState<Product[]>([]);
 
+  // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProductId(event.target.value);
   };
+
+  // Fetch product by ID and add it to the cart
   const handleProductIdSubmit = async () => {
     if (productId.trim() === "" || isNaN(Number(productId))) {
       setProductIdError(true);
@@ -38,7 +46,6 @@ const Cart = () => {
     }
 
     try {
-    
       const response = await fetch(`http://localhost:3333/products/${productId}`, {
         method: "GET",
         headers: {
@@ -49,11 +56,8 @@ const Cart = () => {
       const result = await response.json();
 
       if (response.ok) {
-   
         const fetchedProduct: Product = result;
-
         setCart((prevCart) => [...prevCart, fetchedProduct]);
-
         setMessage("Product added to cart successfully!");
         setProductId(""); // Clear input after success
         setProductIdError(false);
@@ -68,10 +72,49 @@ const Cart = () => {
     }
   };
 
+  // Handle checkout process using Stripe
+  const handleCheckout = async () => {
+    try {
+      // Calculate total amount
+      const totalAmount = cart.reduce(
+        (acc, product) => acc + parseFloat(product.price) * product.quantity,
+        0
+      );
+
+      // Call your backend to create a Stripe session
+      const response = await fetch("http://localhost:4000/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: totalAmount * 100, // Convert to cents for Stripe
+          cart, // You can send cart items if needed in the backend
+        }),
+      });
+
+      const session = await response.json();
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (stripe) {
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: session.id,
+        });
+
+        if (error) {
+          console.error("Stripe checkout error:", error.message);
+        }
+      }
+    } catch (err) {
+      console.error("Error in checkout process", err);
+    }
+  };
+
   return (
     <Box py={32}>
       <Container>
-
+        {/* Add Product to Cart */}
         <Flex justify="space-between" align="center">
           <Title order={2}>Add Product</Title>
         </Flex>
@@ -99,16 +142,24 @@ const Cart = () => {
           )}
         </Box>
 
+        {/* Cart Items Section */}
         <Box mt={16}>
           <Title order={3}>Cart Items</Title>
           {cart.length === 0 ? (
             <Text>No items in the cart.</Text>
           ) : (
-            cart.map((product) => (
-              <ProductCard product={product}/>
-            ))
+            cart.map((product) => <ProductCard product={product} key={product.id} />)
           )}
         </Box>
+
+        {/* Proceed to Payment Button */}
+        {cart.length > 0 && (
+          <Box mt={32}>
+            <Button color="green" onClick={handleCheckout}>
+              Proceed to Payment
+            </Button>
+          </Box>
+        )}
       </Container>
     </Box>
   );

@@ -15,45 +15,44 @@ app.use(cors({
   origin:"http://localhost:4200",
   credentials: true,}
 ));
-
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.use("/categories",categoriesRoute);
 app.use("/products",productRoute);
 app.use("/customers",customersRoutes);
 app.use("/barcode", barCoderRoutes);
-// const express = require("express");
-// import Success from "./Success";
-
-
-app.post("/create-checkout-session", async (req, res) => {
-    const { amount } = req.body;
-
+app.post('/create-checkout-session', async (req, res) => {
+    const { cart } = req.body;
+    
+    // Log cart for debugging
+    console.log("Cart received:", cart);
+  
     try {
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            line_items: [
-                {
-                    price_data: {
-                        currency: "usd",
-                        product_data: {
-                            name: "Sample Product",
-                        },
-                        unit_amount: amount * 100, // amount in cents
-                    },
-                    quantity: 1,
-                },
-            ],
-            mode: "payment",
-            success_url: "http://localhost:5173/success", // Replace with your success page
-            cancel_url: "http://localhost:3000/cancel",   // Replace with your cancel page
-        });
-
-        res.json({ id: session.id });
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: cart.map((product) => ({
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: product.name,
+            },
+            unit_amount: Math.round(parseFloat(product.price) * 100), 
+          },
+          quantity: product.quantity || 1, 
+        })),
+        mode: 'payment',
+        success_url: 'http://localhost:3000/success',
+        cancel_url: 'http://localhost:3000/cancel',
+      });
+  
+      res.json({ id: session.id });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      console.error("Error creating checkout session:", error);
+      res.status(500).json({ error: 'Something went wrong' });
     }
-});
+  });
+  
+  
 
 app.listen(4000, () => {
     console.log("Server running on port 4000");
