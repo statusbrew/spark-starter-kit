@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 const CustomerSchema = new mongoose.Schema({
-    carNumber: { type: String, required: true },
+    vehicleNumber: { type: String, required: true },
     vehicleType: { type: String, enum: ['car', 'bike'], default: 'car' },
     entryDateTime: { type: Date },
     exitDateTime: { type: Date },
@@ -11,9 +11,7 @@ const CustomerSchema = new mongoose.Schema({
     direction: [{ type: mongoose.Schema.Types.ObjectId, ref: "Direction" }],
     salesTransactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "SalesTransaction" }],
     vehicle: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" }],
-    passwordChangedAt: { type: Date },
-    passwordResetToken: { type: String },
-    passwordResetExpire: { type: Date },
+
   }, { timestamps: true });
   
   CustomerSchema.index({ carNumber: 1 }, { unique: true }); // Assuming car number is unique
