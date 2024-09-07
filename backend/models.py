@@ -231,10 +231,7 @@ class EmergencyReport(Base):
             name="emergency_report_sensor_id_fkey",
         ),
         ForeignKeyConstraint(
-            ["user_id"],
-            ["user.id"],
-            ondelete="SET NULL",
-            name="emergency_report_user_id_fkey",
+            ["user_id"], ["user.user_id"], name="emergency_report_user_id_fkey"
         ),
         PrimaryKeyConstraint("id", name="emergency_report_pkey"),
     )
@@ -245,8 +242,8 @@ class EmergencyReport(Base):
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
     )
-    user_id = mapped_column(Integer)
     sensor_id = mapped_column(String(50))
+    user_id = mapped_column(Uuid)
 
     sensor: Mapped[Optional["Sensor"]] = relationship(
         "Sensor", back_populates="emergency_report"
@@ -266,10 +263,7 @@ class EnergyUsage(Base):
             name="energy_usage_sensor_id_fkey",
         ),
         ForeignKeyConstraint(
-            ["user_id"],
-            ["user.id"],
-            ondelete="CASCADE",
-            name="energy_usage_user_id_fkey",
+            ["user_id"], ["user.user_id"], name="energy_usage_user_id_fkey"
         ),
         PrimaryKeyConstraint("id", name="energy_usage_pkey"),
     )
@@ -281,10 +275,10 @@ class EnergyUsage(Base):
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
     )
-    user_id = mapped_column(Integer, nullable=False)
+    user_id = mapped_column(Uuid)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="energy_usage")
-    user: Mapped["User"] = relationship("User", back_populates="energy_usage")
+    user: Mapped[Optional["User"]] = relationship("User", back_populates="energy_usage")
 
 
 class Events(Base):
@@ -322,10 +316,7 @@ class WaterUsage(Base):
             name="water_usage_sensor_id_fkey",
         ),
         ForeignKeyConstraint(
-            ["user_id"],
-            ["user.id"],
-            ondelete="CASCADE",
-            name="water_usage_user_id_fkey",
+            ["user_id"], ["user.user_id"], name="water_usage_user_id_fkey"
         ),
         PrimaryKeyConstraint("id", name="water_usage_pkey"),
     )
@@ -337,10 +328,10 @@ class WaterUsage(Base):
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
     )
-    user_id = mapped_column(Integer, nullable=False)
+    user_id = mapped_column(Uuid)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="water_usage")
-    user: Mapped["User"] = relationship("User", back_populates="water_usage")
+    user: Mapped[Optional["User"]] = relationship("User", back_populates="water_usage")
 
 
 class VolunteerForms(Base):
