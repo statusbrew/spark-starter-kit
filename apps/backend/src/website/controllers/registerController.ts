@@ -1,4 +1,4 @@
-export const loginUserController = async (req, res) => {
+export const registerController = async (req, res) => {
     try {
       console.log("I am working Perfectly Fine");
     } catch (error) {

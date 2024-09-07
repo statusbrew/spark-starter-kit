@@ -2,7 +2,7 @@ const Mall = require('../models/mallModel');
 const parkingLayout = require('../models/parkingModel');
 const parkingFee = require('../models/parkingFeeModel');
 
-exports.submitParkingFee = async (req, res) => {
+export const submitParkingFee = async (req, res) => {
     const { carPrice, vehiclePrice } = req.body;
 
     // Basic validation
@@ -31,7 +31,7 @@ exports.submitParkingFee = async (req, res) => {
     }
 };
 
-exports.submitParkingLayout = async (req, res) => {
+export const submitParkingLayout = async (req, res) => {
     const { numberOfPillars, rangeOfPillars, minCarsPerPillar, entryGates, exitGates } = req.body;
 
     // Basic validation
@@ -64,7 +64,7 @@ exports.submitParkingLayout = async (req, res) => {
     }
 };
 
-exports.submitMallDetails = async (req, res) => {
+export const submitMallDetails = async (req, res) => {
     const { complexName, email, mallLocation, contactSupport } = req.body;
 
     // Basic validation
@@ -94,3 +94,57 @@ exports.submitMallDetails = async (req, res) => {
         res.status(500).json({ message: 'Server error, please try again later' });
     }
 };
+
+export const adminHomeGet = async (req, res) => {
+    try {
+      const {licPlate, vehicleType,organizationUniqueDomainID} = req.body;
+
+     
+
+
+      // create payment order and send to frontend
+
+      return res.status(200).json({
+        status_code:200,
+        data: '',
+        message: "Successfully Saved"
+      });
+
+
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        status_code: 500,
+        success: false,
+        message: "something went wong",
+      });
+    }
+  };
+
+  export const adminSystemCrashesController = async (req, res) => {
+    try {
+      const {licPlate, vehicleType,organizationUniqueDomainID} = req.body;
+
+     
+
+
+      // create payment order and send to frontend
+
+      return res.status(200).json({
+        status_code:200,
+        data: '',
+        message: "Successfully Saved"
+      });
+
+
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        status_code: 500,
+        success: false,
+        message: "something went wong",
+      });
+    }
+  };

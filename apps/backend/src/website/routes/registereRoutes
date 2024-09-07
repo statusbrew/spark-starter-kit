@@ -1,0 +1,12 @@
+import express from "express";
+const router = express.Router();
+
+import {
+    registerController,
+
+} from "../controllers/registerController";
+
+router.post("/registerUser",registerController  ); //optimized
+
+
+export default router;
