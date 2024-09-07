@@ -106,7 +106,7 @@ class Users(Base):
     reauthentication_sent_at = mapped_column(DateTime(True))
     deleted_at = mapped_column(DateTime(True))
 
-    user: Mapped["User"] = relationship("User", uselist=False, back_populates="user")
+    user: Mapped["PublicUser"] = relationship("User", uselist=False, back_populates="user")
 
 
 t_pg_stat_statements = Table(
@@ -187,7 +187,7 @@ class Sensor(Base):
     )
 
 
-class User(Base):
+class PublicUser(Base):
     __tablename__ = "user"
     __table_args__ = (
         ForeignKeyConstraint(["user_id"], ["auth.users.id"], name="user_user_id_fkey"),
@@ -249,7 +249,7 @@ class EmergencyReport(Base):
     sensor: Mapped[Optional["Sensor"]] = relationship(
         "Sensor", back_populates="emergency_report"
     )
-    user: Mapped[Optional["User"]] = relationship(
+    user: Mapped[Optional["PublicUser"]] = relationship(
         "User", back_populates="emergency_report"
     )
 
@@ -282,7 +282,7 @@ class EnergyUsage(Base):
     user_id = mapped_column(Integer, nullable=False)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="energy_usage")
-    user: Mapped["User"] = relationship("User", back_populates="energy_usage")
+    user: Mapped["PublicUser"] = relationship("User", back_populates="energy_usage")
 
 
 class Events(Base):
@@ -306,7 +306,7 @@ class Events(Base):
     user_id = mapped_column(Integer, nullable=False)
     poster_filename = mapped_column(Text)
 
-    user: Mapped["User"] = relationship("User", back_populates="events")
+    user: Mapped["PublicUser"] = relationship("User", back_populates="events")
     volunteer_forms: Mapped[List["VolunteerForms"]] = relationship(
         "VolunteerForms", uselist=True, back_populates="event"
     )
@@ -340,7 +340,7 @@ class WaterUsage(Base):
     user_id = mapped_column(Integer, nullable=False)
 
     sensor: Mapped["Sensor"] = relationship("Sensor", back_populates="water_usage")
-    user: Mapped["User"] = relationship("User", back_populates="water_usage")
+    user: Mapped["PublicUser"] = relationship("User", back_populates="water_usage")
 
 
 class VolunteerForms(Base):
@@ -372,4 +372,4 @@ class VolunteerForms(Base):
     skills = mapped_column(ARRAY(Text()))
 
     event: Mapped["Events"] = relationship("Events", back_populates="volunteer_forms")
-    user: Mapped["User"] = relationship("User", back_populates="volunteer_forms")
+    user: Mapped["PublicUser"] = relationship("User", back_populates="volunteer_forms")
