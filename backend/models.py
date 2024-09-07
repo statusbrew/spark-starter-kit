@@ -185,6 +185,9 @@ class Sensor(Base):
     emergency_fire_logs: Mapped[List["EmergencyFireLogs"]] = relationship(
         "EmergencyFireLogs", uselist=True, back_populates="sensor"
     )
+    Garbage: Mapped[List["Garbage"]] = relationship(
+        "Garbage", uselist=True, back_populates="sensor"
+    )
     emergency_report: Mapped[List["EmergencyReport"]] = relationship(
         "EmergencyReport", uselist=True, back_populates="sensor"
     )
@@ -228,8 +231,12 @@ class User(Base):
     name = mapped_column(Text)
     tags = mapped_column(ARRAY(Text()))
     user_id = mapped_column(Uuid)
+    phone_number = mapped_column(Text)
 
     user: Mapped[Optional["Users"]] = relationship("Users", back_populates="user")
+    Garbage: Mapped[List["Garbage"]] = relationship(
+        "Garbage", uselist=True, back_populates="user"
+    )
     emergency_report: Mapped[List["EmergencyReport"]] = relationship(
         "EmergencyReport", uselist=True, back_populates="user"
     )
@@ -245,6 +252,40 @@ class User(Base):
     volunteer_forms: Mapped[List["VolunteerForms"]] = relationship(
         "VolunteerForms", uselist=True, back_populates="user"
     )
+
+
+class Garbage(Base):
+    __tablename__ = "Garbage"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["sensor_id"], ["sensor.sensor_name"], name="Garbage_sensor_id_fkey"
+        ),
+        ForeignKeyConstraint(
+            ["user_id"], ["user.user_id"], name="Garbage_user_id_fkey"
+        ),
+        PrimaryKeyConstraint("id", name="Garbage_pkey"),
+    )
+
+    id = mapped_column(
+        BigInteger,
+        Identity(
+            start=1,
+            increment=1,
+            minvalue=1,
+            maxvalue=9223372036854775807,
+            cycle=False,
+            cache=1,
+        ),
+    )
+    location = mapped_column(Text)
+    sensor_id = mapped_column(Text)
+    timestamp = mapped_column(DateTime)
+    user_id = mapped_column(Uuid)
+
+    sensor: Mapped[Optional["Sensor"]] = relationship(
+        "Sensor", back_populates="Garbage"
+    )
+    user: Mapped[Optional["User"]] = relationship("User", back_populates="Garbage")
 
 
 class EmergencyReport(Base):

@@ -5,7 +5,7 @@ from datetime import datetime
 from auth.jwt_bp import jwt_required
 import os
 from models import User, Events
-from utils.r2 import generate_presigned_url, upload_file_to_r2
+from utils.r2 import delete_file_from_r2, generate_presigned_url, upload_file_to_r2
 from sqlalchemy import UUID, func
 
 # Blueprint for the event routes
@@ -92,6 +92,94 @@ def create_event():
         session.close()
 
 
+@event_bp.route("/", methods=["GET"])
+@jwt_required
+def get_user_events():
+    session = get_db_session()
+    try:
+        user_id = g.user_id
+        events = session.query(Events).filter_by(approval_status="approved").all()
+        events_list = [
+            {
+                "id": event.id,
+                "title": event.title,
+                "description": event.description,
+                "datetime": event.datetime,
+                "location": event.location,
+                "tags": event.tags,
+                "poster_url": (
+                    generate_presigned_url(event.poster_filename)
+                    if event.poster_filename
+                    else None
+                ),
+                "user_id": event.user_id,
+                "approval_status": event.approval_status,
+            }
+            for event in events
+        ]
+        return jsonify(events_list), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        session.close()
+
+
+@event_bp.route("/event/<event_id>", methods=["GET"])
+def get_event(event_id):
+    session = get_db_session()
+    try:
+        event = session.query(Events).get(event_id)
+        if not event:
+            return jsonify({"error": "Event not found"}), 404
+
+        event_data = {
+            "id": event.id,
+            "title": event.title,
+            "description": event.description,
+            "datetime": event.datetime,
+            "location": event.location,
+            "tags": event.tags,
+            "poster_url": (
+                generate_presigned_url(event.poster_filename)
+                if event.poster_filename
+                else None
+            ),
+            "user_id": event.user_id,
+            "approval_status": event.approval_status,
+        }
+
+        return jsonify(event_data), 200
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        session.close()
+
+
+@event_bp.route("/event/<event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    session = get_db_session()
+    try:
+        event = session.query(Events).get(event_id)
+        if not event:
+            return jsonify({"error": "Event not found"}), 404
+
+        if event.poster_filename:
+            delete_file_from_r2(event.poster_filename)
+
+        session.delete(event)
+        session.commit()
+
+        return jsonify({"message": "Event deleted successfully"}), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        session.close()
+
+
 # Route to get all events
 @jwt_required
 @event_bp.route("/admin", methods=["GET"])
@@ -131,7 +219,9 @@ def get_pending_events():
     session = get_db_session()  # Get the database session
     try:
         # Query for events with the 'pending' status
-        pending_events = session.query(Events).filter_by(status="pending").all()
+        pending_events = (
+            session.query(Events).filter_by(approval_status="pending").all()
+        )
 
         # Create a list of event dictionaries for the response
         events_list = [
@@ -142,9 +232,11 @@ def get_pending_events():
                 "datetime": event.datetime,
                 "location": event.location,
                 "tags": event.tags,
-                "poster_url": generate_presigned_url(
-                    event.poster_filename
-                ),  # Generate a URL for the poster
+                "poster_url": (
+                    generate_presigned_url(event.poster_filename)
+                    if event.poster_filename
+                    else None
+                ),
                 "approval_status": event.approval_status,
             }
             for event in pending_events
