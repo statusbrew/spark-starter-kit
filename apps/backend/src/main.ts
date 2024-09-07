@@ -9,7 +9,7 @@ import db from "./config/db"
 
 import {
   demoScheduler
-} from "./util/scheduler";
+} from "./util/scheduler.js";
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.BACKEND_PORT ? Number(process.env.BACKEND_PORT) : 3000;
@@ -28,12 +28,12 @@ app.get('/', (req, res) => {
   res.send({ message: `Hi! I am here to Welcome You! Version --> 200, recent restarted time = ${currentDate}` });
 });
 
-app.listen(3000,  () => {
-  // db();
-  console.log(`[ ready ] http://1}:1}`);
+app.listen(port || 3000,  () => {
+  db();
+  console.log(`[ ready ] http://${host}:${port}`);
 });
 // app.listen()
-// demoScheduler()
+demoScheduler()
 
 mongoose.set("strictQuery", true);
 

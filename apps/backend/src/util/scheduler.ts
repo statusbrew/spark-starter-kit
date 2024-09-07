@@ -1,5 +1,4 @@
-import cron from "node-cron";
-
+const cron = require("node-cron")
 
 
 

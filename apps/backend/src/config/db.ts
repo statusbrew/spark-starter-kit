@@ -11,8 +11,8 @@ console.log(DATABASE_URL);
 export default async function connectToDatabase() {
   try {
     await mongoose.connect(DATABASE_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     });
     // Suppress the deprecation warning for strictQuery
     mongoose.set("strictQuery", false);

@@ -14,7 +14,7 @@
         "outputPath": "dist/apps/backend",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/backend/src/main.js",
+        "main": "apps/backend/src/main.ts",
         "tsConfig": "apps/backend/tsconfig.app.json",
         "assets": ["apps/backend/src/assets"],
         "generatePackageJson": true,
@@ -38,7 +38,7 @@
       }
     },
     "scripts": {
-      "start": "nodemon main.js"
+      "start": "nodemon main.ts"
     },
     "serve": {
       "executor": "@nx/js:node",
