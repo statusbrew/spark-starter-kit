@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <Flex align="center" gap={16}>
         <Image
-          src={product.image}
+          src={product.imageURL}
           alt={product.name}
           width={100}
           height={100}
@@ -30,9 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         />
         <Box>
           <Title order={4}>{product.name}</Title>
-          <Text mt={8} color="gray">
-            {product.description}
-          </Text>
+          
           <Flex align="center" gap={8} mt={8}>
             <Badge color="blue">{product.price} USD</Badge>
             <Badge color="green">Qty: {product.quantity}</Badge>
