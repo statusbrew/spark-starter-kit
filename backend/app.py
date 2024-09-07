@@ -2,7 +2,6 @@
 from flask_cors import CORS
 from config import app, db
 from flask import request, session, jsonify, g
-from itsdangerous import Signer, BadSignature
 from event_management.event_bp import event_bp
 from fire_sensor.fire_sensor_bp import fire_sensor_bp
 from user.user_bp import user_bp
@@ -23,7 +22,6 @@ def test_api():
         jsonify({"message": "This is a test API endpoint.", "status": "success"}),
         200,
     )
-
 
 #fire sensor feature blueprint
 app.register_blueprint(fire_sensor_bp, url_prefix='/fire-sensor')
