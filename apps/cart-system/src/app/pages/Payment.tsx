@@ -13,7 +13,7 @@ const CheckoutForm: React.FC = () => {
     try {
       // Define the response and session types
       const response: Response = await fetch(
-        "http://localhost:4000/create-checkout-session",
+        "http://localhost:3333/create-checkout-session",
         {
           method: "POST",
           headers: {
