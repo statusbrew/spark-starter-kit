@@ -1,5 +1,7 @@
 import crypto from "crypto";
 
+import {razorPayInstance} from "../config/razorPay";
+
 
 export function getCurrentDateTime() {
     const now = new Date();
@@ -14,6 +16,11 @@ export function getCurrentDateTime() {
     const formattedDateTime = `${day}-${month}-${year} ${hour}:${minute}`;
   
     return formattedDateTime;
+  };
+
+
+  export function fetchDirectionForCustomer (){
+
   }
 
 
@@ -44,5 +51,30 @@ export function verifyPayment(
     } catch (error) {
       console.error("Error during payment verification:", error);
       return false;
+    }
+  };
+
+
+  
+  export async function createRazorpayOrder(customer, amount) {
+    const options = {
+      amount: amount*100,
+      currency: "INR",
+      receipt: "receipt#1",
+      notes: {
+        customer_id: customer._id.toString(),
+        vehicleNumber: customer.vehicleNumber
+      }
+    };
+  
+    try {
+      const order = await razorPayInstance.orders.create(options);
+      return {
+        orderId: order.id,
+        orderDetails: order
+      };
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      throw new Error('Failed to create Razorpay order');
     }
   }

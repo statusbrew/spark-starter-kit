@@ -11,7 +11,7 @@ import loginRoutes from "./admin_templates/routes/loginRoutes";
 import adminRegisterRoutes from "./admin_templates/routes/adminRegisterRoutes";
 import contactUsRoutes from "./website/routes/contactUsRoutes";
 import customerRoutes from "./admin_templates/routes/customerRoutes";
-import registerRoutes from "./website/routes/registerRoutes";
+import registerRoutes from "./website/routes/registereRoutes";
 
 
 import {
@@ -32,7 +32,7 @@ app.use("/admin/login", loginRoutes);
 app.use("/admin/register", adminRegisterRoutes);
 app.use("/website", contactUsRoutes);
 app.use("/customer", customerRoutes);
-app.use("/customer", customerRoutes);
+app.use("/register", registerRoutes);
 
 
 

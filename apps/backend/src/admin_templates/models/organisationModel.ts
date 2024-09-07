@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
-
-const Organisation = new mongoose.Schema({
+const OrganisationSchema = new mongoose.Schema({
     name: { type: String },
     profilePhoto: { type: String, default: "" },
     organizationUniqueDomainID: { type: String, unique: true },
@@ -11,11 +10,13 @@ const Organisation = new mongoose.Schema({
     exitGatePillarNumber: { type: String },
     disabilityEase: { type: Boolean, default: false },
     elderlyCare: { type: Boolean, default: false },
-    email: { type: String, unique: true },
-    password: { type: String },
-    mobileNumber: { type: String },
+    email: { type: String},
+    password: { type: String, },
+    mobileNumber: { type: String, },
     totalParkings: { type: Number, default: 0 },
     totalCollection: { type: Number, default: 0 },
+    carPrice: {type: Number, default: 0},
+    motorVehicle: {type: Number, default: 0},
     otpSms: { type: String },
     otpExpiry: { type: Date },
     customer: [{ type: mongoose.Schema.Types.ObjectId, ref: "Customer" }],
@@ -24,33 +25,28 @@ const Organisation = new mongoose.Schema({
     vehicles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vehicle" }],
     lastLogin: { type: Date },
     loginDetails: [{ type: String }],
-    city: { type: String },
-    refreshToken: { type: String },
-    joiningDate: { type: Date },
-    updatedDate: { type: Date },
+    city: { type: String,  },
+    refreshToken: { type: String, unique: true },
+    joiningDate: { type: Date, default: Date.now },
+    updatedDate: { type: Date, default: Date.now },
     passwordChangedAt: { type: Date },
     passwordResetToken: { type: String },
     passwordResetExpire: { type: Date },
-  }, { timestamps: true });
-  
-Organisation.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    return next();
-  } catch (error) {
-    return next(error);
-  }
+}, { timestamps: true });
+
+OrganisationSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
-Organisation.methods.isPasswordMatched = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+OrganisationSchema.methods.isPasswordMatched = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
 };
 
-Organisation.index({ coachId: 1 }, { unique: true });
-Organisation.index({ refreshToken: 1 });
-
-export default mongoose.model("Organisation", Organisation);
+export default mongoose.model("Organisation", OrganisationSchema);
