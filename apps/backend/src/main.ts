@@ -9,6 +9,8 @@ import db from "./config/db"
 
 import loginRoutes from "./admin_templates/routes/loginRoutes";
 import contactUsRoutes from "./website/routes/contactUsRoutes";
+import customerRoutes from "./admin_templates/routes/customerRoutes";
+
 import {
   demoScheduler
 } from "./util/scheduler.js";
@@ -23,8 +25,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const currentDate = new Date();
-app.use("/admin", loginRoutes);
+app.use("/admin/login", loginRoutes);
 app.use("/website", contactUsRoutes);
+app.use("/customer", customerRoutes);
+
 
 
 app.get('/', (req, res) => {
