@@ -7,6 +7,9 @@ import mongoose from "mongoose";
 
 import db from "./config/db"
 
+import loginRoutes from "./admin_templates/routes/loginRoutes";
+
+
 import {
   demoScheduler
 } from "./util/scheduler.js";
@@ -21,6 +24,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const currentDate = new Date();
+app.use("/admin", loginRoutes);
 
 
 app.get('/', (req, res) => {
