@@ -182,6 +182,9 @@ class Sensor(Base):
     )
     sensor_name = mapped_column(Text, nullable=False)
 
+    emergency_fire_logs: Mapped[List["EmergencyFireLogs"]] = relationship(
+        "EmergencyFireLogs", uselist=True, back_populates="sensor"
+    )
     emergency_report: Mapped[List["EmergencyReport"]] = relationship(
         "EmergencyReport", uselist=True, back_populates="sensor"
     )
@@ -190,6 +193,25 @@ class Sensor(Base):
     )
     water_usage: Mapped[List["WaterUsage"]] = relationship(
         "WaterUsage", uselist=True, back_populates="sensor"
+    )
+
+
+class EmergencyFireLogs(Base):
+    __tablename__ = "emergency_fire_logs"
+    __table_args__ = (
+        ForeignKeyConstraint(["sensor_id"], ["sensor.id"], name="fk_sensor"),
+        PrimaryKeyConstraint("id", name="emergency_fire_logs_pkey"),
+    )
+
+    id = mapped_column(Integer)
+    sensor_id = mapped_column(String(50), nullable=False)
+    fire_hazard_level = mapped_column(Integer, nullable=False)
+    smoke_level = mapped_column(Integer, nullable=False)
+    temp_level = mapped_column(Integer, nullable=False)
+    log_time = mapped_column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+
+    sensor: Mapped["Sensor"] = relationship(
+        "Sensor", back_populates="emergency_fire_logs"
     )
 
 
