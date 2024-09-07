@@ -170,13 +170,17 @@ t_pg_stat_statements_info = Table(
 
 class Sensor(Base):
     __tablename__ = "sensor"
-    __table_args__ = (PrimaryKeyConstraint("id", name="sensor_pkey"),)
+    __table_args__ = (
+        PrimaryKeyConstraint("id", name="sensor_pkey"),
+        UniqueConstraint("sensor_name", name="sensor_sensor_name_key"),
+    )
 
     id = mapped_column(String(50))
     location = mapped_column(String(100), nullable=False)
     installation_date = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
     )
+    sensor_name = mapped_column(Text, nullable=False)
 
     emergency_report: Mapped[List["EmergencyReport"]] = relationship(
         "EmergencyReport", uselist=True, back_populates="sensor"
@@ -226,7 +230,7 @@ class EmergencyReport(Base):
     __table_args__ = (
         ForeignKeyConstraint(
             ["sensor_id"],
-            ["sensor.id"],
+            ["sensor.sensor_name"],
             ondelete="SET NULL",
             name="emergency_report_sensor_id_fkey",
         ),
@@ -242,7 +246,7 @@ class EmergencyReport(Base):
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
     )
-    sensor_id = mapped_column(String(50))
+    sensor_id = mapped_column(Text)
     user_id = mapped_column(Uuid)
 
     sensor: Mapped[Optional["Sensor"]] = relationship(
@@ -258,7 +262,7 @@ class EnergyUsage(Base):
     __table_args__ = (
         ForeignKeyConstraint(
             ["sensor_id"],
-            ["sensor.id"],
+            ["sensor.sensor_name"],
             ondelete="CASCADE",
             name="energy_usage_sensor_id_fkey",
         ),
@@ -270,7 +274,7 @@ class EnergyUsage(Base):
 
     id = mapped_column(Integer)
     location = mapped_column(String(100), nullable=False)
-    sensor_id = mapped_column(String(50), nullable=False)
+    sensor_id = mapped_column(Text, nullable=False)
     usage_kwh = mapped_column(Double(53), nullable=False)
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
@@ -311,7 +315,7 @@ class WaterUsage(Base):
     __table_args__ = (
         ForeignKeyConstraint(
             ["sensor_id"],
-            ["sensor.id"],
+            ["sensor.sensor_name"],
             ondelete="CASCADE",
             name="water_usage_sensor_id_fkey",
         ),
@@ -323,7 +327,7 @@ class WaterUsage(Base):
 
     id = mapped_column(Integer)
     location = mapped_column(String(100), nullable=False)
-    sensor_id = mapped_column(String(50), nullable=False)
+    sensor_id = mapped_column(Text, nullable=False)
     usage_liters = mapped_column(Double(53), nullable=False)
     timestamp = mapped_column(
         DateTime(True), nullable=False, server_default=text("now()")
