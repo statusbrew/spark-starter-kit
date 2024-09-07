@@ -7,22 +7,35 @@ const columns = [
     { name: "Fee", uid: "fee", sortable: true },
     { name: "Vehicle Type", uid: "vehicleType", sortable: true },
     { name: "Date|Time", uid: "dateTime", sortable: true },
-    { name: "Actions", uid: "actions" },
-];
-
-const vehicles = [
+    { name: "Payment Mode", uid: "paymentMode", sortable: true }, // Added Payment Mode column
+    // { name: "Actions", uid: "actions" },
+  ];
+  
+  const vehicles = [
     {
-        serial: 1,
-        vehicleNumber: "ABC123",
-        name: "John Doe",
-        status: "InRoute",
-        spot: "A1",
-        fee: "₹200",
-        vehicleType: "Car",
-        dateTime: "2024-09-07 10:30 AM",
+      serial: 1,
+      vehicleNumber: "ABC123",
+      name: "John Doe",
+      status: "InRoute",
+      spot: "A1",
+      fee: "₹200",
+      vehicleType: "Car",
+      dateTime: "2024-09-07 10:30 AM",
+      paymentMode: "Online",
     },
     {
-        serial: 2,
+      serial: 2,
+      vehicleNumber: "XYZ456",
+      name: "Jane Smith",
+      status: "Parked",
+      spot: "B2",
+      fee: "₹150",
+      vehicleType: "Bike",
+      dateTime: "2024-09-07 11:00 AM",
+      paymentMode: "Cash", 
+    },
+    {
+        serial: 3,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -30,9 +43,10 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
+        paymentMode: "Online", 
+      },
+      {
+        serial: 4,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -40,9 +54,10 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
+        paymentMode: "Cash", 
+      },
+      {
+        serial: 5,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -50,9 +65,10 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
+        paymentMode: "Online", 
+      },
+      {
+        serial: 6,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -60,9 +76,10 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
+        paymentMode: "Cash", 
+      },
+      {
+        serial: 7,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -70,9 +87,10 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
+        paymentMode: "Online", 
+      },
+      {
+        serial: 8,
         vehicleNumber: "XYZ456",
         name: "Jane Smith",
         status: "Parked",
@@ -80,17 +98,8 @@ const vehicles = [
         fee: "₹150",
         vehicleType: "Bike",
         dateTime: "2024-09-07 11:00 AM",
-    },
-    {
-        serial: 2,
-        vehicleNumber: "XYZ456",
-        name: "Jane Smith",
-        status: "Parked",
-        spot: "B2",
-        fee: "₹150",
-        vehicleType: "Bike",
-        dateTime: "2024-09-07 11:00 AM",
-    },
-];
+        paymentMode: "Cash", 
+      },
+  ];  
 
 export { columns, vehicles };
