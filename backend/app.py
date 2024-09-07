@@ -15,6 +15,12 @@ def test_api():
 #event feature blueprint
 app.register_blueprint(event_bp, url_prefix='/events')
 
+#fire sensor feature blueprint
+app.register_blueprint(fire_sensor_bp, url_prefix='/fire-sensor')
+
+#user emergency feature blueprint
+app.register_blueprint(user_emergency_bp, url_prefix='/user-emergency')
+
 #run the app
 if __name__ == '__main__':
     with app.app_context():
