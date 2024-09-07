@@ -1,4 +1,6 @@
 from typing import List, Optional
+from config import Base, engine, get_db_session
+
 
 from sqlalchemy import (
     ARRAY,
@@ -26,7 +28,7 @@ from sqlalchemy.dialects.postgresql import JSONB, OID
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column, relationship
 from sqlalchemy.orm.base import Mapped
 
-Base = declarative_base()
+
 metadata = Base.metadata
 
 
@@ -106,7 +108,9 @@ class Users(Base):
     reauthentication_sent_at = mapped_column(DateTime(True))
     deleted_at = mapped_column(DateTime(True))
 
-    user: Mapped["PublicUser"] = relationship("User", uselist=False, back_populates="user")
+    user: Mapped["PublicUser"] = relationship(
+        "User", uselist=False, back_populates="user"
+    )
 
 
 t_pg_stat_statements = Table(
