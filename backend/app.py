@@ -1,5 +1,6 @@
 from config import app, db
-from flask import request, session, jsonify
+from flask import request, session, jsonify, g
+from itsdangerous import Signer, BadSignature
 from event_management.event_bp import event_bp
 
 @app.route('/api/test', methods=['GET'])
