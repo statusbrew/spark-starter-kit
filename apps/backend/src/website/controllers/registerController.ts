@@ -63,8 +63,8 @@ export const registerController = async (req, res) => {
             email,
             password, // Consider hashing the password before saving
             organizationUniqueDomainID,
-            otp,
-            otpExpires: new Date(Date.now() + 10 * 60 * 1000) // OTP expires in 10 minutes
+            otpSms:otp,
+            otpExpiry: new Date(Date.now() + 10 * 60 * 1000) // OTP expires in 10 minutes
         });
 
         await newOrg.save();
