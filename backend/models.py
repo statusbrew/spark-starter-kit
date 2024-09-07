@@ -12,6 +12,7 @@ from sqlalchemy import (
     DateTime,
     Double,
     ForeignKeyConstraint,
+    Identity,
     Index,
     Integer,
     Numeric,
