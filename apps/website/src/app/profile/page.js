@@ -174,7 +174,7 @@ export default function Profile() {
                                     name={field}
                                     onChange={changeHandler}
                                     value={mallFormData[field]}
-                                    placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('Support', 'Support Phone')}`}
+                                    // placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('Support', 'Support Phone')}`}
                                 />
                             </label>
                         ))}
@@ -219,7 +219,7 @@ export default function Profile() {
                                     name={field}
                                     onChange={changeHandler}
                                     value={parkingFormData[field]}
-                                    placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('No Of', 'Number of')}`}
+                                    // placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('No Of', 'Number of')}`}
                                 />
                             </label>
                         ))}
@@ -252,7 +252,7 @@ export default function Profile() {
                                             name={`friendlyParking.pillarNumber${zone.charAt(0).toUpperCase() + zone.slice(1)}`}
                                             onChange={changeHandler}
                                             value={parkingFormData.friendlyParking[`pillarNumber${zone.charAt(0).toUpperCase() + zone.slice(1)}`]}
-                                            placeholder={`Enter pillar number for ${zone.replace(/([A-Z])/g, ' $1')}`}
+                                            // placeholder={`Enter pillar number for ${zone.replace(/([A-Z])/g, ' $1')}`}
                                         />
                                     </label>
                                 )}
@@ -296,7 +296,7 @@ export default function Profile() {
                                     name={field}
                                     onChange={changeHandler}
                                     value={paymentFormData[field]}
-                                    placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('Fee', ' Fee')}`}
+                                    // placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').replace('Fee', ' Fee')}`}
                                 />
                             </label>
                         ))}
