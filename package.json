@@ -2,7 +2,9 @@
   "name": "@spark-starter-kit/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {    "start": "node main.ts"},
+  "scripts": {
+    "start": "node main.ts"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "~18.2.0",
@@ -74,11 +76,15 @@
     "@angular/platform-browser": "~18.2.0",
     "@angular/platform-browser-dynamic": "~18.2.0",
     "@angular/router": "~18.2.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.0.2",
     "@nextui-org/react": "^2.4.6",
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "~4.18.1",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
