@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
-import RazorpayPayment from "../../../../backend/src/razorpay/components/razorPayment"
+import RazorpayPayment from "../../../../backend/src/razorpay/components/razorPayment";
+
 function EditVehicleDetails() {
   const [licensePlate, setLicensePlate] = useState('');
   const [vehicleType, setVehicleType] = useState('Car');
@@ -19,19 +20,39 @@ function EditVehicleDetails() {
     setFee(fees[vehicleType]);
   }, [vehicleType]);
 
-  const handleProceed = () => {
-    console.log({
+  const handleProceed = async () => {
+    const payload = {
       licensePlate,
       vehicleType,
       fee,
       entryDateTime
-    });
-    <RazorpayPayment></RazorpayPayment>
-    // alert('Details submitted!');
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/customer/postCustomer', {  // Change to your actual API route
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('Success:', result);
+        // Optionally trigger RazorpayPayment here
+        // <RazorpayPayment />;
+      } else {
+        console.error('Error:', result);
+      }
+    } catch (error) {
+      console.error('Error submitting details:', error);
+    }
   };
 
   return (
-    <div className=" flex font-inter flex-col justify-center items-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <div className="flex font-inter flex-col justify-center items-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
       <div className="w-full sm:max-w-xl md:max-w-2xl bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-xl md:text-2xl font-semibold mb-6 text-center">Edit Vehicle Details</h1>
         <form className="space-y-5">
@@ -52,7 +73,7 @@ function EditVehicleDetails() {
               onChange={(e) => setVehicleType(e.target.value)}
               className="mt-1 block w-[100%] px-3 py-2 overflow-hidden border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
-              <option className="" value="Car">Car</option>
+              <option value="Car">Car</option>
               <option value="Bike">Bike</option>
             </select>
           </div>
