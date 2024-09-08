@@ -9,6 +9,5 @@ const DirectionSchema = new mongoose.Schema({
   }, { timestamps: true });
   
   
-  DirectionSchema.index({ coachId: 1 });
 
 export default mongoose.model("Direction", DirectionSchema);

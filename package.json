@@ -2,7 +2,7 @@
   "name": "@spark-starter-kit/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {    "start": "node main.ts"},
   "private": true,
   "devDependencies": {
     "@angular-devkit/build-angular": "~18.2.0",

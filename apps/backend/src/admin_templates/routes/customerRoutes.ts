@@ -5,9 +5,9 @@ import {
     postNumberPlateEntry,
     paymentVerificationAndDirectionAllotment,
     vehicleSubmittedSucessfully,
-    requestForReallotment,
+    handleReallotment,
     pinVerification,
-    pinFailureRequeset
+    pinFailureRequest
 
 
 } from "../controllers/customerController";
@@ -16,9 +16,9 @@ import {
 router.post("/postCustomer",  postNumberPlateEntry); 
 router.put("/verifyPayment",  paymentVerificationAndDirectionAllotment);
 router.put("/vehicleParked",  vehicleSubmittedSucessfully);
-router.put("/requestReallotment",  requestForReallotment);
+router.put("/requestReallotment",  handleReallotment);
 router.put("/pinVerification",  pinVerification);
-router.put("/pinFailureRequest",  pinFailureRequeset);
+router.put("/pinFailureRequest",  pinFailureRequest);
 
 
 

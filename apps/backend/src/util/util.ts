@@ -1,5 +1,7 @@
 import crypto from "crypto";
 
+import {razorPayInstance} from "../config/razorPay";
+
 
 export function getCurrentDateTime() {
     const now = new Date();
@@ -14,6 +16,11 @@ export function getCurrentDateTime() {
     const formattedDateTime = `${day}-${month}-${year} ${hour}:${minute}`;
   
     return formattedDateTime;
+  };
+
+
+  export function fetchDirectionForCustomer (){
+
   }
 
 
@@ -45,4 +52,105 @@ export function verifyPayment(
       console.error("Error during payment verification:", error);
       return false;
     }
+  };
+
+
+  
+  export async function createRazorpayOrder(customer, amount) {
+    const options = {
+      amount: amount*100,
+      currency: "INR",
+      receipt: "receipt#1",
+      notes: {
+        customer_id: customer._id.toString(),
+        vehicleNumber: customer.vehicleNumber
+      }
+    };
+  
+    try {
+      const order = await razorPayInstance.orders.create(options);
+      return {
+        orderId: order.id,
+        orderDetails: order
+      };
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      throw new Error('Failed to create Razorpay order');
+    }
   }
+
+  // Utility to find the nearest vacant spot in a 2D array
+  export async function findNearestVacantSpot  (pillars2D, entryPosition)  {
+  const [entryRow, entryCol] = entryPosition;
+
+  let nearestPillar = null;
+  let minDistance = Infinity;
+
+  for (let i = 0; i < pillars2D.length; i++) {
+    for (let j = 0; j < pillars2D[i].length; j++) {
+      const pillar = pillars2D[i][j];
+      const { numberOfCars, minCarsPerPillar } = pillar;
+
+      if (numberOfCars < minCarsPerPillar) {
+        const distance = Math.abs(i - entryRow) + Math.abs(j - entryCol); // Manhattan distance
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestPillar = pillar.pillarName;
+        }
+      }
+    }
+  }
+
+  return nearestPillar || null; // If no vacant spot, return null
+};
+
+const findPillarCoordinates = (pillars2D, nameOfPillar) => {
+  for (let i = 0; i < pillars2D.length; i++) {
+    for (let j = 0; j < pillars2D[i].length; j++) {
+      if (pillars2D[i][j].pillarName === nameOfPillar) {
+        return [i, j]; // Return the coordinates [row, column]
+      }
+    }
+  }
+  return null; // Return null if the pillar is not found
+};
+  
+export async function findPathToAllocatedPillar  (pillars2D, entryGateNearestPillar, allocatedPillarName) {
+  // Find coordinates of the entry gate and allocated pillar
+  const entryCoordinates = findPillarCoordinates(pillars2D, entryGateNearestPillar);
+  const allocatedCoordinates = findPillarCoordinates(pillars2D, allocatedPillarName);
+
+  if (!entryCoordinates || !allocatedCoordinates) {
+    throw new Error('Entry gate or allocated pillar not found');
+  }
+
+  const directions = [];
+  const [entryRow, entryCol] = entryCoordinates;
+  const [allocatedRow, allocatedCol] = allocatedCoordinates;
+
+  // Vertical movement: Check if we need to move up or down
+  if (allocatedRow > entryRow) {
+    for (let i = 0; i < allocatedRow - entryRow; i++) {
+      directions.push('down');
+    }
+  } else if (allocatedRow < entryRow) {
+    for (let i = 0; i < entryRow - allocatedRow; i++) {
+      directions.push('up');
+    }
+  }
+
+  // Horizontal movement: Check if we need to move left or right
+  if (allocatedCol > entryCol) {
+    for (let i = 0; i < allocatedCol - entryCol; i++) {
+      directions.push('right');
+    }
+  } else if (allocatedCol < entryCol) {
+    for (let i = 0; i < entryCol - allocatedCol; i++) {
+      directions.push('left');
+    }
+  }
+
+  return directions;
+};
+
+
