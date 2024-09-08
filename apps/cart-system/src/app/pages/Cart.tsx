@@ -30,11 +30,23 @@ const Cart = () => {
   const [productId, setProductId] = useState<string>(""); 
   const [message, setMessage] = useState<string>(""); 
   const [productIdError, setProductIdError] = useState<boolean>(false); 
+  const [email, setEmail] = useState<string>(""); // State for email address
+  const [emailError, setEmailError] = useState<boolean>(false); // State for email validation
   const [cart, setCart] = useState<Product[]>([]);
 
-  // Handle input change
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProductId(event.target.value);
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    setEmailError(!validateEmail(event.target.value));
+  };
+
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   // Fetch product by ID and add it to the cart
@@ -59,7 +71,7 @@ const Cart = () => {
         const fetchedProduct: Product = result;
         setCart((prevCart) => [...prevCart, fetchedProduct]);
         setMessage("Product added to cart successfully!");
-        setProductId(""); // Clear input after success
+        setProductId(""); 
         setProductIdError(false);
       } else {
         setProductIdError(true);
@@ -82,14 +94,15 @@ const Cart = () => {
       );
 
       // Call your backend to create a Stripe session
-      const response = await fetch("http://localhost:4000/create-checkout-session", {
+      const response = await fetch("http://localhost:3333/payment/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: totalAmount * 100, // Convert to cents for Stripe
-          cart, // You can send cart items if needed in the backend
+          amount: totalAmount * 100, 
+          cart,
+          email, 
         }),
       });
 
@@ -152,10 +165,27 @@ const Cart = () => {
           )}
         </Box>
 
+        {/* Email Input for Checkout */}
+        {cart.length > 0 && (
+          <Box mt={16}>
+            <TextInput
+              label="Email Address"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={handleEmailChange}
+              error={emailError && "Please enter a valid email address."}
+            />
+          </Box>
+        )}
+
         {/* Proceed to Payment Button */}
         {cart.length > 0 && (
           <Box mt={32}>
-            <Button color="green" onClick={handleCheckout}>
+            <Button
+              color="green"
+              onClick={handleCheckout}
+              disabled={email === "" || emailError} // Disable if email is empty or invalid
+            >
               Proceed to Payment
             </Button>
           </Box>
