@@ -41,6 +41,8 @@ const getAllCustomers = async (req, res) => {
 // Read a single customer by ID
 const getCustomerById = async (req, res) => {
   const { id } = req.params;
+  
+  
   const query = `SELECT * FROM customer WHERE id = ?`;
   try {
     connection.query(query, [id], (error, results) => {

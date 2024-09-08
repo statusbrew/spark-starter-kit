@@ -20,6 +20,28 @@ const createProduct = async (req, res) => {
   }
 };
 
+const getProductFromIds = (req, res) => {
+  const ids = req.query.ids ? req.query.ids.split(',').map(id => parseInt(id)) : [];
+  
+  if (ids.length === 0) {
+    return res.status(400).json({ error: 'No IDs provided' });
+  }
+
+ 
+
+
+  const query = `SELECT * FROM product WHERE id IN (${ids.map(() => '?').join(',')})`;
+
+  connection.query(query, ids, (error, results) => {
+    if (error) {
+      console.error("Database error:", error);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    return res.json(results);
+  });
+};
+
+
 // Read all products
 const getAllProducts = async (req, res) => {
   const query = `SELECT * FROM product`;
@@ -115,6 +137,7 @@ module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  getProductFromIds,
   updateProduct,
   deleteProduct,
 };

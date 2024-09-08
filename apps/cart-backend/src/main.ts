@@ -21,7 +21,7 @@ app.use("/products",productRoute);
 app.use("/customers",customersRoutes);
 app.use("/barcode", barCoderRoutes);
 app.use('/payment', paymentRoutes);
-app.use('/orderItem', orderItemRoute);
+app.use('/orderItems', orderItemRoute);
   
 
 
