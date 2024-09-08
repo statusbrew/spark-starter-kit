@@ -8,23 +8,6 @@ const Gateway = async (req, res) => {
   console.log("Email received:", email);
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: cart.map((product) => ({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: product.name,
-          },
-          unit_amount: Math.round(parseFloat(product.price) * 100),
-        },
-        quantity: product.quantity || 1,
-      })),
-      mode: "payment",
-      success_url: "http://localhost:4200/cart",
-      cancel_url: "http://localhost:4200/cart",
-    });
-
     const customerQuery = "SELECT id FROM customer WHERE email = ?";
     connection.query(customerQuery, [email], (customerError, customerResults) => {
       if (customerError) {
@@ -41,11 +24,11 @@ const Gateway = async (req, res) => {
             return res.status(500).json({ error: "Database error while creating customer." });
           }
           customerId = insertResults.insertId; 
-          createOrderAndItems(customerId, cart, session.id, res);
+          createCheckoutSession(customerId, cart, res);
         });
       } else {
         customerId = customerResults[0].id; 
-        createOrderAndItems(customerId, cart, session.id, res);
+        createCheckoutSession(customerId, cart, res);
       }
     });
   } catch (error) {
@@ -53,7 +36,31 @@ const Gateway = async (req, res) => {
     res.status(500).json({ error: "Something went wrong." });
   }
 };
+const createCheckoutSession = async (customerId, cart, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: cart.map((product) => ({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: product.name,
+          },
+          unit_amount: Math.round(parseFloat(product.price) * 100),
+        },
+        quantity: product.quantity || 1,
+      })),
+      mode: "payment",
+      success_url: `http://localhost:4200/order/${customerId}`,
+      cancel_url: "http://localhost:4200/cart",
+    });
 
+    createOrderAndItems(customerId, cart, session.id, res);
+  } catch (error) {
+    console.error("Error creating checkout session:", error);
+    res.status(500).json({ error: "Something went wrong while creating Stripe session." });
+  }
+};
 
 const createOrderAndItems = (customerId, cart, sessionId, res) => {
   const orderQuery = "INSERT INTO orders (customer_id) VALUES (?)";
@@ -84,7 +91,6 @@ const createOrderAndItems = (customerId, cart, sessionId, res) => {
         }
       );
     });
-
     res.json({ id: sessionId });
   });
 };

@@ -6,7 +6,7 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/cart" element={<CustomerOrders />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/order/:customerId" element={<CustomerOrders />} />
         <Route path="*" element={<Navigate to="/cart" />} />
       </Routes>
