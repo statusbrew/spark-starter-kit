@@ -30,6 +30,7 @@ export const contactUsController = async(req, res) => {
 
     try {
         await newQuery.save();
+        console.log("Data recieved")
         res.status(201).json({ message: 'Form submitted successfully' });
     } catch (error) {
         console.error('Error saving form data:', error);

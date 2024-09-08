@@ -5,6 +5,9 @@ import {generateToken} from "../../config/jwtToken";
 export const loginUserController = async (req, res) => {
   try {
       const { email, password } = req.body;
+      console.log(email);
+      console.log(password);
+
 
       if (!email || !password) {
           return res.status(400).json({
