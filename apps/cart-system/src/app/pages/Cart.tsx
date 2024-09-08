@@ -12,7 +12,7 @@ import {
 import { IconCheck, IconX } from "@tabler/icons-react";
 import ProductCard from "../component/Products";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-
+import {onlineEndPoint, localEndPoint} from "../endPoint";
 const stripePromise: Promise<Stripe | null> = loadStripe(
   "pk_test_51P66VjSBINuBNg5tRulpGci113qdQRkOisw8aDnZI7CAa66Yw0QKKxqp9SU46ZLYYFSh5u2avLps9QHJQhJTV7Dh00BeNAEodP"
 );
@@ -58,7 +58,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3333/products/${productId}`, {
+      const response = await fetch(`${onlineEndPoint}/products/${productId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const Cart = () => {
       );
 
       // Call your backend to create a Stripe session
-      const response = await fetch("http://localhost:3333/payment/", {
+      const response = await fetch(`${onlineEndPoint}/payment/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
