@@ -37,8 +37,11 @@ export default function LoginPage() {
       }
 
       const responseData = await response.json();
+      const preHead = responseData["org"];
       console.log(responseData); 
-      router.push("");
+      // router.push(`http://${org}.parkiteasy.tech`);
+      router.push(`http://${preHead}.localhost:3001`);
+
 
     } catch (error) {
       console.error("Error:", error);
