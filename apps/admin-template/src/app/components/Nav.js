@@ -24,22 +24,10 @@ export default function Nav() {
                     Dashboard
                 </li>
                 <li
-                    onClick={() => handleNavigation('/traffic')}
+                    onClick={() => handleNavigation('/systemFailures')}
                     className={`cursor-pointer px-3 py-2 rounded-md text-lg transition-colors ${isActive('/traffic') ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white'}`}
                 >
-                    Traffic
-                </li>
-                <li
-                    onClick={() => handleNavigation('/analytics')}
-                    className={`cursor-pointer px-3 py-2 rounded-md text-lg transition-colors ${isActive('/analytics') ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white'}`}
-                >
-                    Analytics
-                </li>
-                <li
-                    onClick={() => handleNavigation('/payouts')}
-                    className={`cursor-pointer px-3 py-2 rounded-md text-lg transition-colors ${isActive('/payouts') ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white'}`}
-                >
-                    Payouts
+                    System Failure
                 </li>
             </ul>
         </nav>
