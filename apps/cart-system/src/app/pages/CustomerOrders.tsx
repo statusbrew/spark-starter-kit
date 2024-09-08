@@ -10,7 +10,7 @@ import {
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import ProductCard from "../component/Products";
-
+import {onlineEndPoint, localEndPoint} from "../endPoint"
 export interface OrderItem {
   id: number;
   product_id: number;
@@ -52,7 +52,7 @@ const CustomerOrders = () => {
 
     const fetchOrderItems = async () => {
       try {
-        const response = await fetch(`http://localhost:3333/orderItems/customer/${customerId}`, {
+        const response = await fetch(`${onlineEndPoint}/orderItems/customer/${customerId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const CustomerOrders = () => {
 
     const fetchProductDetails = async (productIds: number[]) => {
       try {
-        const response = await fetch(`http://localhost:3333/products/order/ids?ids=${productIds.join(",")}`, {
+        const response = await fetch(`${onlineEndPoint}/products/order/ids?ids=${productIds.join(",")}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -117,7 +117,7 @@ const CustomerOrders = () => {
       try {
       
       
-        const response = await fetch(`http://localhost:3333/customers/${customerId}`, {
+        const response = await fetch(`${onlineEndPoint}/customers/${customerId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

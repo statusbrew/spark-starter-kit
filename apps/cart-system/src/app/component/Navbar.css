@@ -1,0 +1,345 @@
+@import url(https://online-fonts.com/fonts/league-spartan);
+
+/* General Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Landing Page Styles */
+.landing-page {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1500px;
+  padding: 0 0px;
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo .logo {
+  width: 50px;
+  height: auto;
+}
+
+.head {
+  margin-left: 10px;
+  font-size: 24px;
+  font-family: 'League Spartan', sans-serif;
+  color: rgb(46, 122, 124);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: max-height 0.3s ease;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  color: #080808;
+  text-decoration: none;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #7f7c7c;
+}
+
+/* Mobile Toggle Button */
+.menu-toggle {
+  display: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Navbar Button */
+.navbar-button .start-shopping-button {
+  padding: 10px 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.navbar-button .start-shopping-button:hover {
+  background-color: #ff4757;
+}
+
+/* Landing Content */
+.landing-content {
+  /* margin-top: 20px; */
+  padding: 20px;
+}
+
+.landing-content-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.landing-content h1 {
+  font-size: 2.5rem;
+  color: rgb(46, 122, 124);
+  margin-bottom: 20px;
+}
+
+.landing-content p {
+  font-size: 1rem;
+  color: #666;
+  font-weight: bold;
+}
+
+.start-scanning {
+  padding: 10px 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-scanning:hover {
+  background-color: #ff4757;
+}
+
+.landing-content-wrapper-flex{
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  align-items: center;
+  justify-content: start;
+}
+
+/* Image Container */
+.image-container {
+  margin: 0px auto 0px;
+  max-width: 600px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .menu-toggle {
+    display: block; /* Show toggle button on mobile */
+  }
+
+  .nav-links {
+    display: none; /* Hide menu by default on mobile */
+    flex-direction: column;
+    background-color: #f8f9fa;
+    position: absolute;
+    top: 60px; /* Adjust to be below the navbar */
+    right: 0;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+  }
+
+  .nav-links.active {
+    display: flex; /* Show menu when active */
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  .navbar-button {
+    /* display: none; Hide login button on mobile */
+  }
+
+  .landing-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .landing-content p {
+    font-size: 0.9rem;
+  }
+
+  .start-scanning {
+    font-size: 0.9rem;
+  }
+
+  .image-container {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-logo .logo {
+    width: 40px;
+  }
+
+  .head {
+    display: none; /* Hide text logo on very small screens */
+  }
+
+  .navbar-button .start-shopping-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  .landing-content{
+    padding: 0.5rem 20px 20px;
+  }
+  .landing-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .landing-content p {
+    font-size: 0.8rem;
+  }
+}
+
+
+.about-page{
+  text-align: justify;
+}
+.markdown-content {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #333;
+}
+
+.markdown-content h1 {
+  color: #333;
+  font-size: 28px;
+}
+
+.markdown-content p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.markdown-content ul {
+  padding-left: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar {
+      padding: 10px;
+    }
+  
+    .menu-toggle {
+      display: block; /* Show toggle button on mobile */
+    }
+  
+    .nav-links {
+      display: none; /* Hide menu by default on mobile */
+      flex-direction: column;
+      background-color: #f8f9fa;
+      position: absolute;
+      top: 60px; /* Adjust to be below the navbar */
+      right: 0;
+      width: 100%;
+      border-top: 1px solid #ddd;
+      padding: 10px 0;
+      z-index: 999; /* Ensure it is on top */
+    }
+  
+    .nav-links.active {
+      display: flex; /* Show menu when active */
+    }
+  
+    .nav-links li {
+      margin: 10px 0;
+    }
+  
+    .navbar-button {
+      /* Hide login button on mobile if necessary */
+    }
+  
+    .landing-content h1 {
+      font-size: 1.8rem;
+    }
+  
+    .landing-content p {
+      font-size: 0.9rem;
+    }
+  
+    .start-scanning {
+      font-size: 0.9rem;
+    }
+  
+    .image-container {
+      width: 100%;
+      padding: 0 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar-logo .logo {
+      width: 40px;
+    }
+  
+    .head {
+      display: none; /* Hide text logo on very small screens */
+    }
+  
+    .navbar-button .start-shopping-button {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  
+    .landing-content {
+      padding: 0.5rem 20px 20px;
+    }
+  
+    .landing-content h1 {
+      font-size: 1.5rem;
+    }
+  
+    .landing-content p {
+      font-size: 0.8rem;
+    }
+  }
+  
