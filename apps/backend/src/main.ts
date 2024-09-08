@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-
+// import razorpayRoutes from "./razorpay/routes/razorpay"
 import db from "./config/db"
 
 import loginRoutes from "./admin_templates/routes/loginRoutes";
@@ -12,10 +12,8 @@ import adminRegisterRoutes from "./admin_templates/routes/adminRegisterRoutes";
 import contactUsRoutes from "./website/routes/contactUsRoutes";
 import customerRoutes from "./admin_templates/routes/customerRoutes";
 import registerRoutes from "./website/routes/registereRoutes";
-
-
 import {
-  demoScheduler
+  updateCustomerPin
 } from "./util/scheduler.js";
 
 const host = process.env.HOST ?? 'localhost';
@@ -33,6 +31,7 @@ app.use("/admin/register", adminRegisterRoutes);
 app.use("/website", contactUsRoutes);
 app.use("/customer", customerRoutes);
 app.use("/register", registerRoutes);
+// app.use("/api/razorpay", razorpayRoutes);
 
 
 
@@ -48,7 +47,7 @@ app.listen(port || 3000,  () => {
 
 
 // Schedulers:
-demoScheduler()
+updateCustomerPin()
 
 mongoose.set("strictQuery", true);
 

@@ -50,5 +50,8 @@ https://www.figma.com/design/dVNAEtREeJnhYBP9rT4vLH/Park-It-Easy-UI%2FUX?node-id
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"><br>
 
-### 🔗 Deployed Link
+### 🔗 Backend Deployed Link at aws
+https://13.234.238.216/
+
+
 

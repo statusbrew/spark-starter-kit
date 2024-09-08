@@ -16,7 +16,7 @@ export default function Nav() {
     return (
         <nav className="flex min-h-[130px] justify-between items-start bg-black px-4 shadow-md">
             <img src="/parkLogo.svg" alt="logo" />
-            <ul className="flex space-x-6 mt-4">
+            <ul className="space-x-6 mt-4 hidden md:flex">
                 <li
                     onClick={() => handleNavigation('/dashboard')}
                     className={`cursor-pointer px-3 py-2 rounded-md text-lg transition-colors ${isActive('/dashboard') ? 'bg-gray-700 text-white' : 'text-white hover:bg-gray-700 hover:text-white'}`}
