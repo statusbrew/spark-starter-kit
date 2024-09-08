@@ -30,7 +30,7 @@
     "../../dist/apps/website/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
-  ],
+, "../admin-template/src/app/data.js"  ],
   "exclude": [
     "node_modules",
     "jest.config.ts",

@@ -13,8 +13,8 @@ export default function ProfileNav() {
                     </div>
                 </div>
                 <div className="flex justify-center items-center gap-3">
-                    <Link href='/security'>
-                        <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Security</button>
+                    <Link href='/generateLink'>
+                        <button className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Generate Link</button>
                     </Link>
                     <Link href='/profile'>
                         <button className="px-4 py-2 rounded-lg bg-purple-700 text-white hover:bg-purple-800">Profile</button>
