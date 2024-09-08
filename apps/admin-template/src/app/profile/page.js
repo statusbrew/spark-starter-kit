@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Profile() {
     const [mallFormData, setMallFormData] = useState({
@@ -213,7 +214,7 @@ export default function Profile() {
                                     className="text-[0.9rem] border-2 rounded-lg p-2 w-full py-2 outline-none"
                                     style={{ boxShadow: 'inset 0 -1px 0px rgba(255, 255, 255, 0.18)' }}
                                     type={
-                                        field.includes('Pillars') || field.includes('Gates') ? 'number' : 
+                                        field === 'noOfPillars' || field.includes('Gates') ? 'number' : 
                                         'text'
                                     }
                                     name={field}
@@ -223,6 +224,14 @@ export default function Profile() {
                                 />
                             </label>
                         ))}
+                        <Link href='/grid'>
+                        <button className='bg-black rounded-lg p-2 px-4 text-white' onClick={()=>{
+                            localStorage.setItem("parkingFormData",JSON.stringify(parkingFormData))
+                        }}>
+                            Set Layout
+                        </button>
+                        </Link>
+                        
 
                         {/* Friendly Parking Zones */}
                         {['disabilityEase', 'elderlyCare'].map((zone) => (
