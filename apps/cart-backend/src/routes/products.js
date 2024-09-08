@@ -5,6 +5,7 @@ import {
   getAllProducts,
   getProductById,
   updateProduct,
+  getProductFromIds,
   deleteProduct,
 } from "../controller/products";
 
@@ -16,7 +17,7 @@ router.get("/", getAllProducts);
 
 // Read a single product by ID
 router.get("/:id", getProductById);
-
+router.get('/order/ids', getProductFromIds);
 // Update a product by ID
 router.put("/:id", updateProduct);
 

@@ -1,6 +1,6 @@
 // ProductCard.tsx
 import React from "react";
-import { Box, Image, Text, Title, Flex, Badge } from "@mantine/core";
+import { Box, Image,  Title, Flex, Badge } from "@mantine/core";
 import { Product } from "../pages/Cart";  
 
 interface ProductCardProps {
