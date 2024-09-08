@@ -82,10 +82,9 @@ export const paymentVerificationAndDirectionAllotment = async (req, res) => {
     });
     await newTransaction.save();
 
-    // Update customer as payment verified
     const customerUpdate = await customerModel.findByIdAndUpdate(customerID, {
       $set: { isPaymentVerified: true },
-      $push: { transactions: newTransaction._id }  // Assuming you store transaction references in customer model
+      $push: { transactions: newTransaction._id } 
     }, { new: true }).populate('organisation');
 
     if (!customerUpdate) {
@@ -187,9 +186,8 @@ export const vehicleSubmittedSucessfully = async (req, res) => {
 
 export const handleReallotment = async (req, res) => {
   try {
-      const { licPlate, organizationUniqueDomainID, reason } = req.body;
+      const { licPlate, organizationUniqueDomainID, reason,pillarDetails ,oldPillarDetails} = req.body;
 
-      // Check if organization exists
       const organization = await organisationModel.findOne({ organizationUniqueDomainID });
       if (!organization) {
           return res.status(404).json({
@@ -198,7 +196,6 @@ export const handleReallotment = async (req, res) => {
           });
       }
 
-      // Assume vehicle is already in the system, find the original entry
       const originalCustomer = await customerModel.findOne({ vehicleNumber: licPlate });
       if (!originalCustomer) {
           return res.status(404).json({
@@ -207,7 +204,6 @@ export const handleReallotment = async (req, res) => {
           });
       }
 
-      // Create a reallotment record
       const reallotment = new Reallotment({
           vehicleNumber: licPlate,
           originalEntryDateTime: originalCustomer.entryDateTime,
@@ -220,10 +216,15 @@ export const handleReallotment = async (req, res) => {
       // Save the reallotment record
       await reallotment.save();
 
+
+      const locationSpotted = findNearestVacantSpot(pillarDetails.pillars, oldPillarDetails);
+
+
       return res.status(200).json({
           status_code: 200,
           data: reallotment,
-          message: "Reallotment initiated successfully"
+          message: "Reallotment initiated successfully",
+          locationSpotted
       });
 
   } catch (error) {

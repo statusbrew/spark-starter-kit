@@ -129,7 +129,6 @@ export const adminHomeGet = async (req, res) => {
      
 
 
-      // create payment order and send to frontend
 
       return res.status(200).json({
         status_code:200,

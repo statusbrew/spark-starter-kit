@@ -15,7 +15,7 @@ import registerRoutes from "./website/routes/registereRoutes";
 
 
 import {
-  demoScheduler
+  updateCustomerPin
 } from "./util/scheduler.js";
 
 const host = process.env.HOST ?? 'localhost';
@@ -48,7 +48,7 @@ app.listen(port || 3000,  () => {
 
 
 // Schedulers:
-demoScheduler()
+updateCustomerPin()
 
 mongoose.set("strictQuery", true);
 
