@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
@@ -13,7 +13,8 @@ export default function SignUpPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [orgExistsError, setOrgExistsError] = useState(""); // New state for organization existence error
 
-  const changeHandler = async (event) => {
+  // Add the correct type for the event
+  const changeHandler = async (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -24,7 +25,7 @@ export default function SignUpPage() {
     if (name === "organizationUniqueDomainID") {
       try {
         const response = await fetch(
-          `http://localhost:8000/register/organizationExists?organizationUniqueDomainID=${value}`, 
+          `http://localhost:8000/register/organizationExists?organizationUniqueDomainID=${value}`,
           {
             method: "GET",
             headers: {
@@ -44,7 +45,6 @@ export default function SignUpPage() {
         } else {
           setOrgExistsError(""); // Clear error if the organization doesn't exist
         }
-
       } catch (error) {
         console.error("Error:", error);
         setOrgExistsError("The organization already exists.");
@@ -52,10 +52,11 @@ export default function SignUpPage() {
     }
   };
 
-  const submitHandler = async (e) => {
+  // Add the correct type for the form event
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"; // Ensure your API URL is set correctly
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"; 
 
     try {
       const response = await fetch(`${apiUrl}/register/registerUser`, {
@@ -88,7 +89,6 @@ export default function SignUpPage() {
 
       // Redirect to login page
       router.push("/landingPage/login");
-
     } catch (error) {
       console.error("Error:", error);
       setSuccessMessage("There was an error submitting the form");
@@ -149,18 +149,15 @@ export default function SignUpPage() {
         </label>
 
         {/* Display error message if the organization ID already exists */}
-        {orgExistsError && (
-          <p className="text-red-600 mb-4">{orgExistsError}</p>
-        )}
+        {orgExistsError && <p className="text-red-600 mb-4">{orgExistsError}</p>}
 
-        {!orgExistsError && <button
+        <button
           type="submit"
           className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-800"
           disabled={!!orgExistsError} // Disable submit if organization exists
         >
           Sign Up
         </button>
-}
 
         {successMessage && <p className="mt-4">{successMessage}</p>}
       </form>

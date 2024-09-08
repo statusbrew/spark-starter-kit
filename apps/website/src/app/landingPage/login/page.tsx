@@ -1,48 +1,50 @@
 "use client";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export default function LoginPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [formData, setFormData] = useState<FormData>({ email: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  function changeHandler(event) {
+  const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  }
+  };
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"; // Ensure your API URL is set correctly
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     try {
-      const response = await fetch(`${apiUrl}/admin/login/postLoginDetails`, { // Assuming `/auth/login` is your login endpoint
+      const response = await fetch(`${apiUrl}/admin/login/postLoginDetails`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password, 
+          password: formData.password,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Invalid login credentials"); // Handle login error
+        throw new Error("Invalid login credentials");
       }
 
       const responseData = await response.json();
       const preHead = responseData["org"];
-      console.log(responseData); 
-      // router.push(`http://${org}.parkiteasy.tech`);
+      console.log(responseData);
       router.push(`http://${preHead}.localhost:3001`);
-
-
     } catch (error) {
       console.error("Error:", error);
       setErrorMessage("Invalid email or password. Please try again.");
@@ -54,9 +56,7 @@ export default function LoginPage() {
       <form onSubmit={submitHandler} className="bg-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-semibold mb-4">Login</h1>
 
-        {errorMessage && (
-          <p className="text-red-600 mb-4">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
 
         <label className="block mb-2">
           Email:
