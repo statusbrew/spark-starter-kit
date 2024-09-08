@@ -4,6 +4,9 @@ import { PiStarFourThin } from "react-icons/pi";
 import { useRouter } from "next/navigation"; // Next.js useRouter hook
 import { useState } from "react";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const team = [
   { name: "Simarpreet Singh", dp: "/simar.svg" },
   { name: "Vaibhav Chopra", dp: "/vaibhav.svg" },
@@ -18,8 +21,9 @@ export default function LandingPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
-    complex: "",
+    mobile: "",
+    complexName: "",
+    city: "",
     address: "",
     frontEndClient: "parking",
   });
@@ -32,10 +36,44 @@ export default function LandingPage() {
     }));
   }
 
-  async function submitHandler(event) {
-    event.preventDefault();
-    console.log(formData);
-  }
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    
+    const port = process.env.BACKEND_PORT; // Ensure your API URL is set in environment variables
+    
+  
+    try {
+      const response = await fetch(`http://localhost:8000/website/contactUs`, { // Adjust this path to your actual API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), // Use the formData state which holds the form input values
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const responseData = await response.json();
+      setSuccessMessage('Form submitted successfully');
+  
+      // Reset form data if needed
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        complexName: '',
+        city: "",
+        address: '',
+        frontEndClient: 'parking',
+      });
+      
+    } catch (error) {
+      console.error('Error:', error);
+      setSuccessMessage('There was an error submitting the form');
+    }
+  };
 
   return (
     <>
@@ -47,10 +85,10 @@ export default function LandingPage() {
             <img src="/parkLogo.svg" alt="logo" className="w-full" />
           </div>
           <div className="flex sm:gap-5 md:gap-8 md:pl-8 h-full w-auto py-auto items-center justify-center">
-            <a className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">HOME</a>
-            <a className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">ABOUT US</a>
-            <a className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">SOLUTION</a>
-            <a className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">CONTACT US</a>
+            <a href="/" className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">HOME</a>
+            <a href="#about" className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">ABOUT US</a>
+            <a href="#solution" className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">SOLUTION</a>
+            <a href="#contact" className="text-gray-600 font-semibold hover:text-gray-900 cursor-pointer">CONTACT US</a>
           </div>
           <div className="sm:pl-8 font-semibold flex self-center md:gap-3 sm:gap-2">
             <button
@@ -74,7 +112,7 @@ export default function LandingPage() {
           </div>
           <div className="pt-9 pl-10 px-8 self-center w-[57%]">
             Park-It-Easy streamlines and optimize the entire parking process - automating parking to save you
-            time and eliminate hassle in malls and complexes.
+            time and eliminate hassle in malls and complexNamees.
           </div>
         </div>
         <div className="pt-8 flex justify-center items-center">
@@ -84,7 +122,7 @@ export default function LandingPage() {
         <img src="/image.png" alt="image" className="w-[400px] h-[600px] ml-16" />
 
         {/* team */}
-        <h1 className="font-semibold text-3xl my-4" >Our Team</h1>
+        <h1 id="about" className="font-semibold text-3xl my-4" >Our Team</h1>
         <div className="flex flex-wrap items-center justify-center md:justify-between gap-8 w-8/12 my-10 mb-[15rem]">
           {
             team.map((item, index) => (
@@ -99,7 +137,7 @@ export default function LandingPage() {
         <img src="./check.svg" alt="verifications" className="w-full absolute -bottom-4 right-0" />
       </div>
 
-      <section className="w-full flex flex-col lg:flex-row justify-between relative items-center">
+      <section id="solution" className="w-full flex flex-col lg:flex-row justify-between relative items-center">
         <div className="w-[85%] bg-white md:w-[40%] ml-[4rem] md:ml-0 h-[600px] lg:h-[900px] mt-7 rounded-tl-xl rounded-tr-xl md:rounded-tr-none md:rounded-bl-xl flex justify-center items-center relative overflow-hidden">
           <img src="/image.png" alt="mobile" loading="lazy" className="absolute inset-0 w-[100%] h-[100%]" />
         </div>
@@ -117,20 +155,20 @@ export default function LandingPage() {
         <img src="/bannar.svg" alt="bannar" loading="lazy" className="absolute w-[100vw] z-10 -bottom-[2rem] lg:-bottom-[5rem] left-0" />
       </section>
 
-      <section className="w-full bg-black p-[1rem] text-center gap-6 md:p-[3rem] overflow-hidden relative flex flex-col justify-center items-center">
+      <section id="contact" className="w-full bg-black p-[1rem] text-center gap-6 md:p-[3rem] overflow-hidden relative flex flex-col justify-center items-center">
         <div className="w-[400px] h-[400px] absolute -top-[7rem] -left-[7rem] blur-3xl bg-[#7329a8a5]"></div>
         <h1 className="text-3xl text-white font-semibold mt-10">Contact Us</h1>
         <p className="text-sm text-white mb-8 md:mb-[4rem]">Got a question, Want to learn more about us? Get in touch.</p>
 
-        <div className="w-full md:w-11/12 lg:w-8/12 flex flex-col md:flex-row">
-          <div className="w-full bg-white md:w-[45%] h-full min-h-[500px] rounded-tl-xl rounded-tr-xl md:rounded-tr-none md:rounded-bl-xl flex justify-center items-center relative overflow-hidden">
-            <img src="/parking.svg" alt="Laptop" loading="lazy" className="absolute w-[100%] h-full object-cover" />
-          </div>
+        <div className="w-full md:w-11/12 lg:w-8/12 flex flex-col lg:flex-row">
+          {/* <div className="w-full bg-white md:w-[45%] h-full min-h-[500px] rounded-tl-xl rounded-tr-xl md:rounded-tr-none md:rounded-bl-xl flex justify-center items-center relative overflow-hidden"> */}
+            <img src="/parking.svg" alt="Laptop" loading="lazy" className="w-full lg:w-[50%] rounded-tl-xl rounded-tr-xl md:rounded-tr-none md:rounded-bl-xl" />
+          {/* </div> */}
 
-          <form onSubmit={submitHandler} className="w-full bg-white max-w-4xl rounded-bl-xl rounded-br-xl md:rounded-bl-none md:rounded-tr-xl mx-auto p-4">
+          <form onSubmit={submitHandler} className="w-full bg-white max-w-4xl rounded-bl-xl rounded-br-xl md:rounded-bl-none md:rounded-tr-xl mx-auto p-1">
             <div className="flex flex-wrap gap-6 p-2 lg:gap-8 mb-4 lg:p-[2rem] justify-between item-start">
 
-              {/* Email and Phone Number Fields */}
+              {/* Email and mobile Number Fields */}
               <div className="flex flex-wrap justify-between gap-4 w-full">
 
                 {/* Full Name Field */}
@@ -150,21 +188,21 @@ export default function LandingPage() {
 
 
                 <label className="w-full sm:w-[45%]">
-                  <p className="my-2 text-start">Phone Number <sup className='text-red-400'>*</sup></p>
+                  <p className="my-2 text-start">Mobile Number <sup className='text-red-400'>*</sup></p>
                   <input
                     required
                     className="text-[0.9rem] border-2 rounded-lg p-2 w-full py-2 outline-none"
                     style={{ boxShadow: 'inset 0 -1px 0px rgba(255, 255, 255, 0.18)' }}
                     type="text"
-                    name="phone"
-                    // placeholder="Enter phone number"
+                    name="mobile"
+                    // placeholder="Enter mobile number"
                     onChange={changeHandler}
-                    value={formData.phone}
+                    value={formData.mobile}
                   />
                 </label>
 
                 <label className="w-full sm:w-[45%]">
-                  <p className="my-2 text-start">Email Address <sup className='text-red-400'>*</sup></p>
+                  <p className="my-2 text-start">Email Id <sup className='text-red-400'>*</sup></p>
                   <input
                     required
                     className="text-[0.9rem] border-2 rounded-lg p-2 w-full py-2 outline-none"
@@ -178,16 +216,30 @@ export default function LandingPage() {
                 </label>
 
                 <label className="w-full sm:w-[45%]">
-                  <p className="my-2 text-start">Complex Name <sup className='text-red-400'>*</sup></p>
+                  <p className="my-2 text-start">complexName Name <sup className='text-red-400'>*</sup></p>
                   <input
                     required
                     className="text-[0.9rem] border-2 rounded-lg p-2 w-full py-2 outline-none"
                     style={{ boxShadow: 'inset 0 -1px 0px rgba(255, 255, 255, 0.18)' }}
                     type="text"
-                    name="complex"
-                    // placeholder="Enter complex name"
+                    name="complexName"
+                    // placeholder="Enter complexName name"
                     onChange={changeHandler}
-                    value={formData.email}
+                    value={formData.complexNameName}
+                  />
+                </label>
+
+                <label className="w-full">
+                  <p className="my-2 text-start">City <sup className='text-red-400'>*</sup></p>
+                  <input
+                    required
+                    className="text-[0.9rem] border-2 rounded-lg p-2 w-full py-2 outline-none"
+                    style={{ boxShadow: 'inset 0 -1px 0px rgba(255, 255, 255, 0.18)' }}
+                    type="text"
+                    name="city"
+                    // placeholder="Enter your full address"
+                    onChange={changeHandler}
+                    value={formData.city}
                   />
                 </label>
 
@@ -201,7 +253,7 @@ export default function LandingPage() {
                     name="address"
                     // placeholder="Enter your full address"
                     onChange={changeHandler}
-                    value={formData.name}
+                    value={formData.address}
                   />
                 </label>
               </div>
@@ -231,7 +283,7 @@ export default function LandingPage() {
           <div className="flex flex-col text-lg justify-start items-start w-[15%] gap-2">
             <h1 className="text-3xl w-full mb-2 py-2 border-b-2 border-white">Solution</h1>
             <h2>For Shopping Mails</h2>
-            <h2>For Parking Complex</h2>
+            <h2>For Parking complexName</h2>
           </div>
           <div className="flex flex-col text-lg justify-start items-start w-[15%] gap-2">
             <h1 className="text-3xl w-full mb-2 py-2 border-b-2 border-white">Support</h1>

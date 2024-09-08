@@ -5,6 +5,9 @@ import {generateToken} from "../../config/jwtToken";
 export const loginUserController = async (req, res) => {
   try {
       const { email, password } = req.body;
+      console.log(email);
+      console.log(password);
+
 
       if (!email || !password) {
           return res.status(400).json({
@@ -21,12 +24,12 @@ export const loginUserController = async (req, res) => {
           });
       }
 
-      if (!user.isVerified) {
-          return res.status(401).json({
-              status_code: 401,
-              message: "User is not verified. Please verify your account."
-          });
-      }
+    //   if (!user.isVerified) {
+    //       return res.status(401).json({
+    //           status_code: 401,
+    //           message: "User is not verified. Please verify your account."
+    //       });
+    //   }
 
       const isMatch = await user.isPasswordMatched(password);
       if (!isMatch) {
@@ -46,6 +49,7 @@ export const loginUserController = async (req, res) => {
           status_code: 200,
           message: "Login successful",
           refreshToken,
+          org: user.organizationUniqueDomainID
       });
 
   } catch (error) {

@@ -36,7 +36,6 @@ export const registerController = async (req, res) => {
     try {
         const { name, email, password, organizationUniqueDomainID } = req.body;
 
-
         if (!name || !email || !password || !organizationUniqueDomainID) {
             return res.status(400).json({
                 status_code: 400,
@@ -54,8 +53,6 @@ export const registerController = async (req, res) => {
             });
         }
 
-
-
         const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
 
         const newOrg = new organisationModel({
@@ -68,6 +65,7 @@ export const registerController = async (req, res) => {
         });
 
         await newOrg.save();
+        
 
         // Send the OTP to the user's email
         // await sendOTPEmail(email, otp);
