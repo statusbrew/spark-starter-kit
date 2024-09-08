@@ -21,12 +21,12 @@ export const loginUserController = async (req, res) => {
           });
       }
 
-      if (!user.isVerified) {
-          return res.status(401).json({
-              status_code: 401,
-              message: "User is not verified. Please verify your account."
-          });
-      }
+    //   if (!user.isVerified) {
+    //       return res.status(401).json({
+    //           status_code: 401,
+    //           message: "User is not verified. Please verify your account."
+    //       });
+    //   }
 
       const isMatch = await user.isPasswordMatched(password);
       if (!isMatch) {
