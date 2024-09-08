@@ -96,7 +96,7 @@ export const paymentVerificationAndDirectionAllotment = async (req, res) => {
 
     const organisation = customerUpdate.organisation;
 
-    // Fetch parking layout details for the organization
+    // Selected Seats here , to show and Feed which is feed
     let pillarDetails = await parkingModel.findOne({ organisation: organisation });
 
     if (!pillarDetails || !pillarDetails.pillars || !pillarDetails.entryGateNearestPillar) {

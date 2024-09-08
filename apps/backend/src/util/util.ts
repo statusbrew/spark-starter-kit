@@ -79,30 +79,29 @@ export function verifyPayment(
     }
   }
 
-  // Utility to find the nearest vacant spot in a 2D array
   export async function findNearestVacantSpot  (pillars2D, entryPosition)  {
-  const [entryRow, entryCol] = entryPosition;
-
-  let nearestPillar = null;
-  let minDistance = Infinity;
-
-  for (let i = 0; i < pillars2D.length; i++) {
-    for (let j = 0; j < pillars2D[i].length; j++) {
-      const pillar = pillars2D[i][j];
-      const { numberOfCars, minCarsPerPillar } = pillar;
-
-      if (numberOfCars < minCarsPerPillar) {
-        const distance = Math.abs(i - entryRow) + Math.abs(j - entryCol); // Manhattan distance
-        if (distance < minDistance) {
-          minDistance = distance;
-          nearestPillar = pillar.pillarName;
+    const [entryRow, entryCol] = entryPosition;
+  
+    let nearestPillar = null;
+    let minDistance = Infinity;
+  
+    for (let i = 0; i < pillars2D.length; i++) {
+      for (let j = 0; j < pillars2D[i].length; j++) {
+        const pillar = pillars2D[i][j];
+        const { numberOfCars, minCarsPerPillar } = pillar;
+  
+        if (numberOfCars < minCarsPerPillar) {
+          const distance = Math.abs(i - entryRow) + Math.abs(j - entryCol); // Manhattan distance
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestPillar = pillar.pillarName;
+          }
         }
       }
     }
-  }
-
-  return nearestPillar || null; // If no vacant spot, return null
-};
+  
+    return nearestPillar || null; // If no vacant spot, return null
+  };
 
 const findPillarCoordinates = (pillars2D, nameOfPillar) => {
   for (let i = 0; i < pillars2D.length; i++) {

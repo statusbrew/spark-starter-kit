@@ -11,6 +11,8 @@ const SalesTransactionSchema = new mongoose.Schema({
     razorpay_payment_id: { type: String },
     paymentStatus: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
     mode: { type: String, enum: ['cash', 'online'], default: 'cash' },
+    amount: { type: Number },
+
   }, { timestamps: true });
   
   SalesTransactionSchema.index({ organisationID: 1, customerID: 1 }); // For efficient querying

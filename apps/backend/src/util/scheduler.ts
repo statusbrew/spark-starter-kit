@@ -1,7 +1,7 @@
 
 const cron = require('node-cron');
-const customerModel = require('./models/customerModel'); // Assuming your model is in models/customerModel
 import crypto from "crypto";
+import customerModel from "../admin_templates/models/customerModel";
 
 
 // Function to update the pin for each customer

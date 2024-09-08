@@ -8,7 +8,7 @@ router.post('/mallDetails',submitMallDetails);
 router.post('/parkingLayout', submitParkingLayout);
 router.post('/parkingFee', submitParkingFee);
 router.get('/getAdminHome', adminHomeGet);
-router.get('/getAdminSystemCrashes', adminSystemCrashesController);
+// router.get('/getAdminSystemCrashes', adminSystemCrashesController);
 
 
 export default router;
