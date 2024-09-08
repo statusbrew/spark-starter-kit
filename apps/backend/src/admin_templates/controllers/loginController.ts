@@ -46,6 +46,7 @@ export const loginUserController = async (req, res) => {
           status_code: 200,
           message: "Login successful",
           refreshToken,
+          org: user.organizationUniqueDomainID
       });
 
   } catch (error) {
