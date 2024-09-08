@@ -3,9 +3,7 @@ const app=express();
 const router=express.Router();
 const multer=require('multer')
 const OpenAI = require('openai');
-const client = new OpenAI({
-    apiKey: "", // This is the default and can be omitted
-});
+
 const secret=require('../secret')
 
 const jwt=require('jsonwebtoken')
