@@ -13,5 +13,48 @@ model User {
   name String
   age Int
   gender String
-
+  bloodReports bloodReport[]
+  liverReport liverReport[]
+}
+model Doc {
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String
+  name String
+  qualification String
+  mentaltexts Mentaltext[]
+}
+model Mentaltext {
+  textid Int @unique @default(autoincrement())
+  docid Int 
+  doc Doc @relation(fields: [docid],references: [id])
+  text String
+  useremail String
+}
+model bloodReport {
+  id      Int     @id @default(autoincrement())
+  userId Int 
+  user   User @relation(fields: [userId], references: [id])
+  reportDate String?
+  hemoglobin Decimal?
+  packedCellVolume Decimal?
+  rbcCount Decimal?
+  mcv Decimal?
+  lymphocytesDiff Decimal?
+  neutrophils Decimal?
+  lymphocytes Decimal?
+  summary String
+}
+model liverReport {
+  id              Int     @id @default(autoincrement())
+  userId Int 
+  user   User @relation(fields: [userId], references: [id])
+  reportDate String?
+  SGPT Decimal?
+  SGOT Decimal?
+  GGTP Decimal?
+  Albumin Decimal?
+  Protein Decimal?
+  Globulin Decimal?
+  summary String
 }

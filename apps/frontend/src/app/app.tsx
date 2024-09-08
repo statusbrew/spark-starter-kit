@@ -1,16 +1,13 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
+import ImageUploaderblood from "./components/Blood";
+import { BrowserRouter,Route,Routes } from "react-router-dom";
+import ImageUploaderliver from "./components/Liver";
+import Cancerupload from "./components/Cancer";
 
-import NxWelcome from './nx-welcome';
-
-import { Route, Routes, Link } from 'react-router-dom';
-
-export function App() {
-  return (
+function App(){
+  return(
     <div>
-      hello world!
+      <Cancerupload />
     </div>
-  );
+  )
 }
-
 export default App;

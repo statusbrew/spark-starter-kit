@@ -61,6 +61,8 @@
       "options": {
         "targetName": "e2e"
       }
+    },{
+        "plugin": "@nxlv/python"
     },
     {
       "plugin": "@nx/eslint/plugin",
