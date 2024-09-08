@@ -4,7 +4,7 @@ const router=express.Router();
 const multer=require('multer')
 const OpenAI = require('openai');
 const client = new OpenAI({
-    apiKey: "sk-RZu_sJuGQa0t7VhW6KzhL177q-AVOfQWkTFFSe9v-zT3BlbkFJIiYaXfZkzouEbR68TDWq6rSV5ycpMmthP439BXavIA", // This is the default and can be omitted
+    apiKey: "", // This is the default and can be omitted
 });
 const secret=require('../secret')
 
